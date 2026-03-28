@@ -291,11 +291,11 @@ function ServiceCard({
       custom={index * 0.08}
       className="border border-chrome-light/60 bg-warm-paper p-8 flex flex-col gap-3 group hover:border-chrome-dark transition-colors duration-200"
     >
-      <p className="font-mono text-[10px] tracking-[0.16em] text-chrome uppercase">
+      <p className="font-mono text-[11px] tracking-[0.16em] text-chrome uppercase">
         {code}
       </p>
       <h3 className="font-sans text-base font-medium text-ink">{title}</h3>
-      <p className="font-sans text-sm leading-relaxed text-ink/65">{description}</p>
+      <p className="font-sans text-sm leading-relaxed text-ink/75">{description}</p>
       <div className="mt-auto pt-2">
         <span className="inline-block w-4 h-px bg-chrome-light group-hover:bg-chrome-dark group-hover:w-6 transition-all duration-300" />
       </div>
@@ -320,15 +320,15 @@ function PricingRow({
     <motion.div
       variants={fadeUp}
       custom={index * 0.07}
-      className="grid grid-cols-[1fr_auto] gap-4 items-start border-b border-chrome-light/40 py-5 last:border-none"
+      className="grid grid-cols-[1fr_auto] gap-4 items-start border-b border-chrome-light/60 py-5 last:border-none"
     >
       <div className="space-y-1">
         <p className="font-sans text-base font-medium text-ink">{label}</p>
-        <p className="font-sans text-sm text-ink/65">{note}</p>
+        <p className="font-sans text-sm text-ink/75">{note}</p>
       </div>
       <span
         className={[
-          "shrink-0 self-start font-mono text-[10px] uppercase tracking-[0.14em] px-2 py-1",
+          "shrink-0 self-start font-mono text-[11px] uppercase tracking-[0.14em] px-2 py-1",
           "bg-fog text-steel border border-chrome-light/60",
         ].join(" ")}
       >
@@ -370,7 +370,7 @@ function VoteCard({
       ].join(" ")}
     >
       <div className="space-y-0.5 min-w-0">
-        <p className="font-mono text-[10px] tracking-[0.14em] text-steel uppercase">
+        <p className="font-mono text-[11px] tracking-[0.14em] text-steel uppercase">
           {id}
         </p>
         <p className="font-sans text-sm font-medium text-ink truncate">{title}</p>
@@ -414,7 +414,7 @@ function TrustPoint({
       <span className="shrink-0 mt-0.5 w-1.5 h-1.5 rounded-full bg-chrome-dark" aria-hidden="true" />
       <div className="space-y-0.5">
         <p className="font-sans text-sm font-semibold text-ink">{keyword}</p>
-        <p className="font-sans text-sm text-ink/65">{description}</p>
+        <p className="font-sans text-sm text-ink/75">{description}</p>
       </div>
     </motion.div>
   );
@@ -426,7 +426,7 @@ function TrustPoint({
 
 function SectionLabel({ children }: { children: string }) {
   return (
-    <p className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-steel mb-3">
+    <p className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-steel mb-3">
       {children}
     </p>
   );
@@ -481,7 +481,7 @@ export default function CustomPage() {
             <motion.p
               variants={fadeUp}
               custom={0.16}
-              className="font-sans text-lg leading-relaxed text-ink/65 max-w-xl"
+              className="font-sans text-lg leading-relaxed text-ink/75 max-w-xl"
             >
               Chaque organisation a ses spécificités. Nous construisons des
               agents et des systèmes sur-mesure, adaptés à votre réalité.
@@ -521,7 +521,7 @@ export default function CustomPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 1 — METHOD / PIPELINE                                        */}
       {/* ------------------------------------------------------------------ */}
-      <section id="methode" className="border-b border-chrome-light/40">
+      <section id="methode" className="border-b border-chrome-light/60">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-24 lg:py-32">
           <motion.div
             initial="hidden"
@@ -555,17 +555,17 @@ export default function CustomPage() {
                   className="flex gap-4"
                 >
                   <div className="flex flex-col items-center gap-1">
-                    <span className="font-mono text-[10px] text-steel">{step.id}</span>
+                    <span className="font-mono text-[11px] text-steel">{step.id}</span>
                     <div className="w-3 h-3 rounded-full border-2 border-chrome-dark bg-chrome-dark shrink-0" />
                     {i < PROCESS_STEPS.length - 1 && (
-                      <div className="flex-1 w-px bg-chrome-light/60 min-h-[24px]" />
+                      <div className="flex-1 w-px bg-chrome-light/80 min-h-[24px]" />
                     )}
                   </div>
                   <div className="pb-2">
                     <p className="font-mono text-xs font-medium uppercase tracking-[0.16em] text-ink mb-1">
                       {step.label}
                     </p>
-                    <p className="font-sans text-sm text-ink/65 leading-relaxed">
+                    <p className="font-sans text-sm text-ink/75 leading-relaxed">
                       {step.description}
                     </p>
                   </div>
@@ -579,7 +579,7 @@ export default function CustomPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 2 — COMPLEMENTARY SERVICES                                  */}
       {/* ------------------------------------------------------------------ */}
-      <section className="border-b border-chrome-light/40 bg-warm-paper">
+      <section className="border-b border-chrome-light/60 bg-warm-paper">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-24 lg:py-32">
           <motion.div
             initial="hidden"
@@ -606,7 +606,7 @@ export default function CustomPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 3 — PRICING                                                  */}
       {/* ------------------------------------------------------------------ */}
-      <section className="border-b border-chrome-light/40">
+      <section className="border-b border-chrome-light/60">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-24 lg:py-32">
           <motion.div
             initial="hidden"
@@ -620,7 +620,7 @@ export default function CustomPage() {
                 <h2 className="font-sans text-2xl font-semibold text-ink tracking-tight">
                   Transparent par design
                 </h2>
-                <p className="font-sans text-sm leading-relaxed text-ink/65">
+                <p className="font-sans text-sm leading-relaxed text-ink/75">
                   Aucune surprise. Chaque composant du coût est expliqué avant
                   engagement.
                 </p>
@@ -639,10 +639,10 @@ export default function CustomPage() {
               >
                 {/* Header row */}
                 <div className="grid grid-cols-[1fr_auto] gap-4 px-6 py-4 bg-fog">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-steel">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-steel">
                     Composant
                   </p>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-steel">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-steel">
                     Type
                   </p>
                 </div>
@@ -661,7 +661,7 @@ export default function CustomPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 4 — ROADMAP PARTICIPATIVE                                   */}
       {/* ------------------------------------------------------------------ */}
-      <section className="border-b border-chrome-light/40 bg-warm-paper">
+      <section className="border-b border-chrome-light/60 bg-warm-paper">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-24 lg:py-32">
           <motion.div
             initial="hidden"
@@ -682,7 +682,7 @@ export default function CustomPage() {
                 <motion.ul
                   variants={fadeUp}
                   custom={0.1}
-                  className="space-y-4 font-sans text-sm text-ink/65 leading-relaxed"
+                  className="space-y-4 font-sans text-sm text-ink/75 leading-relaxed"
                   role="list"
                 >
                   <li className="flex items-start gap-3">
@@ -714,7 +714,7 @@ export default function CustomPage() {
                     sizes="(max-width: 1024px) 100vw, 50vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink/30 to-transparent" />
-                  <span className="absolute bottom-3 left-4 font-mono text-[10px] text-chrome-light tracking-[0.14em] uppercase">
+                  <span className="absolute bottom-3 left-4 font-mono text-[11px] text-chrome-light tracking-[0.14em] uppercase">
                     Sessions de travail collaboratif
                   </span>
                 </motion.div>
@@ -723,10 +723,10 @@ export default function CustomPage() {
               {/* Interactive vote mockup */}
               <motion.div variants={fadeUp} custom={0.12} className="space-y-3">
                 <div className="flex items-center justify-between mb-4">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-steel">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-steel">
                     Backlog — features en vote
                   </p>
-                  <span className="font-mono text-[10px] text-chrome-dark">
+                  <span className="font-mono text-[11px] text-chrome-dark">
                     {ROADMAP_FEATURES.length} features
                   </span>
                 </div>
@@ -743,7 +743,7 @@ export default function CustomPage() {
                   ))}
                 </div>
 
-                <p className="pt-3 font-mono text-[10px] text-chrome-dark text-right">
+                <p className="pt-3 font-mono text-[11px] text-chrome-dark text-right">
                   Accès complet après signature
                 </p>
               </motion.div>
@@ -755,7 +755,7 @@ export default function CustomPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 5 — CTA                                                      */}
       {/* ------------------------------------------------------------------ */}
-      <section id="contact" className="border-b border-chrome-light/40 bg-system-green">
+      <section id="contact" className="border-b border-chrome-light/60 bg-system-green">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-24 lg:py-32">
           <motion.div
             initial="hidden"
@@ -765,7 +765,7 @@ export default function CustomPage() {
             className="max-w-xl"
           >
             <motion.div variants={fadeUp} custom={0} className="mb-2">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-chrome-light">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-chrome-light">
                 Contact
               </p>
             </motion.div>
@@ -827,7 +827,7 @@ export default function CustomPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 6 — WHY LITE OPS                                            */}
       {/* ------------------------------------------------------------------ */}
-      <section className="border-b border-chrome-light/40">
+      <section className="border-b border-chrome-light/60">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-24 lg:py-32">
           <motion.div
             initial="hidden"
@@ -842,7 +842,7 @@ export default function CustomPage() {
                   Conçu pour les organisations qui n&apos;ont pas le droit à
                   l&apos;erreur
                 </h2>
-                <p className="font-sans text-sm text-ink/65 leading-relaxed">
+                <p className="font-sans text-sm text-ink/75 leading-relaxed">
                   Chaque décision d&apos;architecture répond à une contrainte
                   opérationnelle réelle — pas à une mode technologique.
                 </p>

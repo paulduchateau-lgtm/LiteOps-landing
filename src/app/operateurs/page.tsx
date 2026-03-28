@@ -358,7 +358,7 @@ function SidebarItem({
       onClick={onClick}
       aria-pressed={isSelected}
       className={[
-        "w-full text-left px-4 py-4 border-b border-rule/50 transition-all duration-150 group",
+        "w-full text-left px-4 py-4 border-b border-rule/70 transition-all duration-150 group",
         "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-signal-green",
         isSelected
           ? "bg-system-green text-architect-paper"
@@ -368,7 +368,7 @@ function SidebarItem({
       <div className="flex items-center justify-between gap-2">
         <span
           className={[
-            "font-mono text-[10px] tracking-widest",
+            "font-mono text-[11px] tracking-widest",
             isSelected ? "text-signal-green" : "text-chrome-dark",
           ].join(" ")}
         >
@@ -376,7 +376,7 @@ function SidebarItem({
         </span>
         <span
           className={[
-            "text-[9px] font-mono tracking-wider uppercase px-1.5 py-0.5 border",
+            "text-[11px] font-mono tracking-wider uppercase px-1.5 py-0.5 border",
             isSelected
               ? "border-signal-green/40 text-signal-green"
               : "border-rule text-chrome-dark",
@@ -423,7 +423,7 @@ function DetailPanel({ operator }: { operator: Operator }) {
             </h2>
             <p className="mt-1 text-sm text-sage font-mono">{operator.role}</p>
           </div>
-          <span className="shrink-0 font-mono text-[10px] tracking-widest uppercase border border-chrome text-steel px-2 py-1 mt-1">
+          <span className="shrink-0 font-mono text-[11px] tracking-widest uppercase border border-chrome text-steel px-2 py-1 mt-1">
             {operator.category}
           </span>
         </div>
@@ -438,7 +438,7 @@ function DetailPanel({ operator }: { operator: Operator }) {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <span className="block w-3 h-px bg-chrome-light" />
-            <span className="font-mono text-[10px] tracking-widest text-steel uppercase">
+            <span className="font-mono text-[11px] tracking-widest text-steel uppercase">
               Inputs
             </span>
           </div>
@@ -456,7 +456,7 @@ function DetailPanel({ operator }: { operator: Operator }) {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <span className="block w-3 h-px bg-chrome-light" />
-            <span className="font-mono text-[10px] tracking-widest text-steel uppercase">
+            <span className="font-mono text-[11px] tracking-widest text-steel uppercase">
               Outputs
             </span>
           </div>
@@ -475,7 +475,7 @@ function DetailPanel({ operator }: { operator: Operator }) {
       <div className="px-8 lg:px-10 py-6 border-b border-chrome-light">
         <div className="flex items-center gap-2 mb-3">
           <span className="block w-3 h-px bg-chrome-light" />
-          <span className="font-mono text-[10px] tracking-widest text-steel uppercase">
+          <span className="font-mono text-[11px] tracking-widest text-steel uppercase">
             Utilisé dans
           </span>
         </div>
@@ -505,14 +505,14 @@ function DetailPanel({ operator }: { operator: Operator }) {
       <div className="px-8 lg:px-10 py-6">
         <div className="flex items-center gap-2 mb-4">
           <span className="block w-3 h-px bg-chrome-light" />
-          <span className="font-mono text-[10px] tracking-widest text-steel uppercase">
+          <span className="font-mono text-[11px] tracking-widest text-steel uppercase">
             Schéma fonctionnel
           </span>
         </div>
         <div className="border border-chrome-light bg-fog/50 p-4 blueprint-grid">
           <OperatorDiagram operator={operator} />
         </div>
-        <p className="mt-2 font-mono text-[9px] text-chrome tracking-wider">
+        <p className="mt-2 font-mono text-[11px] text-chrome tracking-wider">
           // flux de données — représentation schématique
         </p>
       </div>
@@ -550,7 +550,7 @@ function MobileSelector({
             aria-selected={isSelected}
             onClick={() => onSelect(op.id)}
             className={[
-              "shrink-0 font-mono text-[10px] tracking-widest uppercase",
+              "shrink-0 font-mono text-[11px] tracking-widest uppercase",
               "px-4 py-2 border transition-all duration-150 whitespace-nowrap",
               "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-signal-green",
               isSelected
@@ -592,7 +592,7 @@ export default function OperateursPage() {
           {/* Breadcrumb */}
           <nav
             aria-label="Fil d'Ariane"
-            className="flex items-center gap-2 mb-6 font-mono text-[10px] tracking-widest text-sage uppercase"
+            className="flex items-center gap-2 mb-6 font-mono text-[11px] tracking-widest text-sage uppercase"
           >
             <Link
               href="/"
@@ -608,11 +608,11 @@ export default function OperateursPage() {
           <div className="flex items-end justify-between gap-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="font-mono text-[10px] tracking-widest text-steel">
+                <span className="font-mono text-[11px] tracking-widest text-steel">
                   REF-SYS/OPS
                 </span>
                 <span className="block w-8 h-px bg-rule" />
-                <span className="font-mono text-[10px] tracking-widest text-chrome">
+                <span className="font-mono text-[11px] tracking-widest text-chrome">
                   v1.0
                 </span>
               </div>
@@ -628,7 +628,7 @@ export default function OperateursPage() {
               <span className="font-mono text-4xl font-light text-chrome-dark leading-none">
                 {String(OPERATORS.length).padStart(2, "0")}
               </span>
-              <span className="font-mono text-[9px] tracking-widest text-chrome uppercase mt-1">
+              <span className="font-mono text-[11px] tracking-widest text-chrome uppercase mt-1">
                 opérateurs
               </span>
             </div>
@@ -664,7 +664,7 @@ export default function OperateursPage() {
           >
             {/* Sidebar header */}
             <div className="px-4 py-3 border-b border-rule bg-warm-paper">
-              <span className="font-mono text-[9px] tracking-widest text-chrome uppercase">
+              <span className="font-mono text-[11px] tracking-widest text-chrome uppercase">
                 Index — {OPERATORS.length} composants
               </span>
             </div>
@@ -683,7 +683,7 @@ export default function OperateursPage() {
 
             {/* Sidebar footer */}
             <div className="px-4 py-3 border-t border-rule">
-              <p className="font-mono text-[9px] tracking-wider text-chrome leading-relaxed">
+              <p className="font-mono text-[11px] tracking-wider text-chrome leading-relaxed">
                 // Chaque opérateur est atomique.
                 <br />
                 // Combinaison par les agents.

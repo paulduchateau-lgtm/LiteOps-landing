@@ -300,11 +300,11 @@ function SvgDefs() {
   return (
     <defs>
       <pattern id="mm-grid-sm" width="20" height="20" patternUnits="userSpaceOnUse">
-        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(212,208,200,0.2)" strokeWidth="0.5" />
+        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(212,208,200,0.2)" strokeWidth="0.8" />
       </pattern>
       <pattern id="mm-grid-lg" width="100" height="100" patternUnits="userSpaceOnUse">
         <rect width="100" height="100" fill="url(#mm-grid-sm)" />
-        <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(212,208,200,0.4)" strokeWidth="0.5" />
+        <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(212,208,200,0.4)" strokeWidth="0.8" />
       </pattern>
       <marker id="mm-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
         <path d="M0,0.5 L0,6.5 L6,3.5 z" fill="#B8B5AE" />
@@ -385,13 +385,13 @@ function PipelineDiagram({
       <rect width="960" height="320" fill="url(#mm-grid-lg)" />
 
       {/* Outer border */}
-      <rect x="8" y="8" width="944" height="304" fill="none" stroke="#CDC9C2" strokeWidth="0.75" strokeDasharray="4 2" />
+      <rect x="8" y="8" width="944" height="304" fill="none" stroke="#CDC9C2" strokeWidth="1" strokeDasharray="4 2" />
 
       {/* Corner marks */}
       {([[8,8],[952,8],[8,312],[952,312]] as [number,number][]).map(([cx, cy], i) => (
         <g key={i}>
-          <line x1={cx - 5} y1={cy} x2={cx + 5} y2={cy} stroke="#CDC9C2" strokeWidth="0.75" />
-          <line x1={cx} y1={cy - 5} x2={cx} y2={cy + 5} stroke="#CDC9C2" strokeWidth="0.75" />
+          <line x1={cx - 5} y1={cy} x2={cx + 5} y2={cy} stroke="#CDC9C2" strokeWidth="1" />
+          <line x1={cx} y1={cy - 5} x2={cx} y2={cy + 5} stroke="#CDC9C2" strokeWidth="1" />
         </g>
       ))}
 
@@ -402,10 +402,10 @@ function PipelineDiagram({
       <text x="940" y="26" fontFamily="'JetBrains Mono', monospace" fontSize="7.5" fill="#B8B5AE" letterSpacing="0.08em" textAnchor="end">
         2026-03-28
       </text>
-      <line x1="20" y1="33" x2="940" y2="33" stroke="#CDC9C2" strokeWidth="0.5" />
+      <line x1="20" y1="33" x2="940" y2="33" stroke="#CDC9C2" strokeWidth="0.8" />
 
       {/* Status badge — EN DÉVELOPPEMENT */}
-      <rect x="800" y="36" width="140" height="16" fill="rgba(154,150,142,0.15)" stroke="#7D7A73" strokeWidth="0.5" />
+      <rect x="800" y="36" width="140" height="16" fill="rgba(154,150,142,0.15)" stroke="#7D7A73" strokeWidth="0.8" />
       <text x="870" y="47" fontFamily="'JetBrains Mono', monospace" fontSize="6.5" fill="#7D7A73" letterSpacing="0.1em" textAnchor="middle">
         EN DÉVELOPPEMENT
       </text>
@@ -414,7 +414,7 @@ function PipelineDiagram({
       <text x="20" y="85" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#9A968E" letterSpacing="0.12em">INPUTS</text>
       {inputItems.map((item, i) => (
         <g key={item}>
-          <rect x={20} y={93 + i * 26} width={item.length * 6 + 12} height="20" fill="#F6F4F0" stroke="#D5D1CB" strokeWidth="0.5" />
+          <rect x={20} y={93 + i * 26} width={item.length * 6 + 12} height="20" fill="#F6F4F0" stroke="#D5D1CB" strokeWidth="0.8" />
           <text x={26} y={107 + i * 26} fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#6B6B60" letterSpacing="0.05em">
             {item}
           </text>
@@ -523,7 +523,7 @@ function PipelineDiagram({
       <text x="868" y="200" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#9A968E" letterSpacing="0.12em">OUTPUTS</text>
       {outputItems.map((item, i) => (
         <g key={item}>
-          <rect x={868} y={208 + i * 26} width={item.length * 6 + 12} height="20" fill="#EFF5E6" stroke="#D5D1CB" strokeWidth="0.5" />
+          <rect x={868} y={208 + i * 26} width={item.length * 6 + 12} height="20" fill="#EFF5E6" stroke="#D5D1CB" strokeWidth="0.8" />
           <text x={874} y={222 + i * 26} fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#6B6B60" letterSpacing="0.05em">
             {item}
           </text>
@@ -561,7 +561,7 @@ function OperatorPanel({
     >
       <div className="flex items-center justify-between border-b border-rule bg-system-green px-5 py-3">
         <div>
-          <span className="font-mono text-[9px] tracking-[0.14em] text-chrome block">{op.code}</span>
+          <span className="font-mono text-[11px] tracking-[0.14em] text-chrome block">{op.code}</span>
           <h3 className="font-mono text-sm font-medium tracking-widest text-architect-paper">{op.label}</h3>
         </div>
         <button
@@ -575,15 +575,15 @@ function OperatorPanel({
 
       <div className="p-6 space-y-5">
         <div>
-          <p className="mb-1.5 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">Rôle</p>
-          <p className="font-sans text-sm leading-relaxed text-ink/65">{op.role}</p>
+          <p className="mb-1.5 font-mono text-[11px] tracking-[0.14em] text-sage uppercase">Rôle</p>
+          <p className="font-sans text-sm leading-relaxed text-ink/75">{op.role}</p>
         </div>
 
         <div>
-          <p className="mb-2 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">Entrées</p>
+          <p className="mb-2 font-mono text-[11px] tracking-[0.14em] text-sage uppercase">Entrées</p>
           <ul className="space-y-1">
             {op.inputs.map((inp) => (
-              <li key={inp} className="flex items-center gap-2 font-mono text-xs text-ink/65">
+              <li key={inp} className="flex items-center gap-2 font-mono text-xs text-ink/75">
                 <span className="text-chrome-dark shrink-0">→</span>
                 {inp}
               </li>
@@ -592,10 +592,10 @@ function OperatorPanel({
         </div>
 
         <div>
-          <p className="mb-2 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">Sorties</p>
+          <p className="mb-2 font-mono text-[11px] tracking-[0.14em] text-sage uppercase">Sorties</p>
           <ul className="space-y-1">
             {op.outputs.map((out) => (
-              <li key={out} className="flex items-center gap-2 font-mono text-xs text-ink/65">
+              <li key={out} className="flex items-center gap-2 font-mono text-xs text-ink/75">
                 <span className="text-chrome-dark shrink-0">←</span>
                 {out}
               </li>
@@ -604,9 +604,9 @@ function OperatorPanel({
         </div>
 
         <div>
-          <p className="mb-2 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">Aperçu sortie</p>
+          <p className="mb-2 font-mono text-[11px] tracking-[0.14em] text-sage uppercase">Aperçu sortie</p>
           <div className="border border-rule bg-architect-paper p-3">
-            <p className="font-mono text-[10px] leading-relaxed text-steel">{op.preview}</p>
+            <p className="font-mono text-[11px] leading-relaxed text-steel">{op.preview}</p>
           </div>
         </div>
       </div>
@@ -692,7 +692,7 @@ export default function MatchmakerPage() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-            className="font-sans font-light text-architect-paper leading-[0.9] tracking-tight mb-6"
+            className="font-sans font-normal md:font-light text-architect-paper leading-[0.9] tracking-tight mb-6"
             style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}
           >
             MATCHMAKER
@@ -703,7 +703,7 @@ export default function MatchmakerPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
-            className="font-sans font-light text-architect-paper/60 max-w-xl leading-relaxed mb-12"
+            className="font-sans font-normal md:font-light text-architect-paper/70 max-w-xl leading-relaxed mb-12"
             style={{ fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
           >
             Faites correspondre vos ressources aux besoins. En secondes, avec explication structurée.
@@ -718,7 +718,7 @@ export default function MatchmakerPage() {
           >
             {["6 opérateurs", "4 types de ressources", "Score radar intégré"].map((m) => (
               <div key={m} className="flex items-center gap-2">
-                <span className="font-mono text-[10px] tracking-[0.15em] text-chrome uppercase">—</span>
+                <span className="font-mono text-[11px] tracking-[0.15em] text-chrome uppercase">—</span>
                 <span className="font-mono text-sm text-architect-paper/80 tracking-widest">{m}</span>
               </div>
             ))}
@@ -732,7 +732,7 @@ export default function MatchmakerPage() {
           >
             <a
               href="mailto:contact@liteops.fr?subject=Intérêt MATCHMAKER AG003"
-              className="group inline-flex items-center gap-3 border border-steel/40 px-8 py-4 font-mono text-sm text-architect-paper/60 tracking-widest uppercase transition-all duration-300 hover:border-architect-paper/40 hover:text-architect-paper/80"
+              className="group inline-flex items-center gap-3 border border-steel/40 px-8 py-4 font-mono text-sm text-architect-paper/80 tracking-widest uppercase transition-all duration-300 hover:border-architect-paper/40 hover:text-architect-paper/80"
             >
               Exprimer mon intérêt
               <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
@@ -746,7 +746,7 @@ export default function MatchmakerPage() {
             transition={{ duration: 0.5, delay: 0.8 }}
             className="mt-8 border border-steel/20 bg-architect-paper/5 px-6 py-4 max-w-lg"
           >
-            <p className="font-mono text-[10px] text-steel/80 leading-relaxed tracking-wider">
+            <p className="font-mono text-[11px] text-steel/80 leading-relaxed tracking-wider">
               Cet agent est en cours de développement. La documentation ci-dessous présente l'architecture cible et les fonctionnalités prévues.
             </p>
           </motion.div>
@@ -754,10 +754,10 @@ export default function MatchmakerPage() {
 
         {/* Bottom rule */}
         <div className="border-t border-architect-paper/10 max-w-7xl mx-auto px-8 lg:px-20 w-full py-6 flex items-center justify-between">
-          <span className="font-mono text-[10px] text-chrome tracking-widest">LITE OPS / AG003</span>
+          <span className="font-mono text-[11px] text-chrome tracking-widest">LITE OPS / AG003</span>
           <Link
             href="/operateurs"
-            className="font-mono text-[10px] text-chrome-dark hover:text-architect-paper transition-colors tracking-widest uppercase"
+            className="font-mono text-[11px] text-chrome-dark hover:text-architect-paper transition-colors tracking-widest uppercase"
           >
             Voir les opérateurs →
           </Link>
@@ -778,7 +778,7 @@ export default function MatchmakerPage() {
             </span>
             <h2
               id="pipeline-heading"
-              className="mt-3 font-sans font-light text-system-green leading-tight"
+              className="mt-3 font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
               Six opérateurs. Un résultat expliqué.
@@ -798,7 +798,7 @@ export default function MatchmakerPage() {
                   onClick={() => setSelectedOp(prev => prev === op.id ? null : op.id)}
                   aria-pressed={selectedOp === op.id}
                   className={[
-                    "font-mono text-[9px] tracking-[0.15em] px-3 py-1.5 border transition-all duration-200",
+                    "font-mono text-[11px] tracking-[0.15em] px-3 py-1.5 border transition-all duration-200",
                     selectedOp === op.id
                       ? "border-signal-green bg-signal-green/10 text-signal-green"
                       : "border-chrome text-steel hover:border-chrome-dark hover:text-ink",
@@ -824,7 +824,7 @@ export default function MatchmakerPage() {
                   exit={{ opacity: 0 }}
                   className="flex h-20 items-center justify-center border border-dashed border-rule"
                 >
-                  <p className="font-mono text-[10px] tracking-[0.1em] text-chrome">
+                  <p className="font-mono text-[11px] tracking-[0.1em] text-chrome">
                     Sélectionnez un opérateur pour voir les détails
                   </p>
                 </motion.div>
@@ -848,7 +848,7 @@ export default function MatchmakerPage() {
             </span>
             <h2
               id="operators-heading"
-              className="mt-3 font-sans font-light text-system-green leading-tight"
+              className="mt-3 font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
               Chaque brique, documentée.
@@ -860,21 +860,21 @@ export default function MatchmakerPage() {
               <SectionReveal key={op.id} delay={i * 0.08}>
                 <div className="border border-rule bg-architect-paper p-8 hover:border-chrome-dark transition-colors duration-200">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="font-mono text-[10px] tracking-widest text-signal-green bg-system-green px-2 py-0.5">
+                    <span className="font-mono text-[11px] tracking-widest text-signal-green bg-system-green px-2 py-0.5">
                       {op.code}
                     </span>
                     <span className="font-mono text-xs text-steel tracking-widest">{op.label}</span>
                   </div>
 
                   <h3 className="font-sans font-light text-ink text-lg mb-2">{op.description}</h3>
-                  <p className="font-sans text-sm leading-relaxed text-ink/60 mb-6">{op.role}</p>
+                  <p className="font-sans text-sm leading-relaxed text-ink/70 mb-6">{op.role}</p>
 
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div>
-                      <p className="font-mono text-[9px] tracking-widest text-chrome-dark uppercase mb-2">Entrées</p>
+                      <p className="font-mono text-[11px] tracking-widest text-chrome-dark uppercase mb-2">Entrées</p>
                       <ul className="space-y-1">
                         {op.inputs.map(inp => (
-                          <li key={inp} className="font-mono text-[10px] text-steel flex items-start gap-1.5">
+                          <li key={inp} className="font-mono text-[11px] text-steel flex items-start gap-1.5">
                             <span className="text-chrome-dark shrink-0 mt-0.5">→</span>
                             {inp}
                           </li>
@@ -882,10 +882,10 @@ export default function MatchmakerPage() {
                       </ul>
                     </div>
                     <div>
-                      <p className="font-mono text-[9px] tracking-widest text-chrome-dark uppercase mb-2">Sorties</p>
+                      <p className="font-mono text-[11px] tracking-widest text-chrome-dark uppercase mb-2">Sorties</p>
                       <ul className="space-y-1">
                         {op.outputs.map(out => (
-                          <li key={out} className="font-mono text-[10px] text-steel flex items-start gap-1.5">
+                          <li key={out} className="font-mono text-[11px] text-steel flex items-start gap-1.5">
                             <span className="text-chrome-dark shrink-0 mt-0.5">←</span>
                             {out}
                           </li>
@@ -895,8 +895,8 @@ export default function MatchmakerPage() {
                   </div>
 
                   <div className="border-t border-rule pt-4">
-                    <p className="font-mono text-[9px] tracking-widest text-chrome-dark uppercase mb-1">Aperçu</p>
-                    <p className="font-mono text-[10px] text-steel leading-relaxed">{op.preview}</p>
+                    <p className="font-mono text-[11px] tracking-widest text-chrome-dark uppercase mb-1">Aperçu</p>
+                    <p className="font-mono text-[11px] text-steel leading-relaxed">{op.preview}</p>
                   </div>
                 </div>
               </SectionReveal>
@@ -917,7 +917,7 @@ export default function MatchmakerPage() {
             <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">Expertise</span>
             <h2
               id="layers-heading"
-              className="mt-3 font-sans font-light text-system-green leading-tight"
+              className="mt-3 font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
               Trois couches d'intégration
@@ -954,17 +954,17 @@ export default function MatchmakerPage() {
                 className="grid grid-cols-1 lg:grid-cols-2 gap-10"
               >
                 <div>
-                  <p className="font-sans leading-relaxed text-ink/65 mb-8">
+                  <p className="font-sans leading-relaxed text-ink/75 mb-8">
                     {currentTab.description}
                   </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {currentTab.annotations.map((ann, i) => (
                     <div key={i} className="border border-rule bg-fog px-4 py-3">
-                      <span className="font-mono text-[9px] tracking-widest text-chrome-dark block mb-1">
+                      <span className="font-mono text-[11px] tracking-widest text-chrome-dark block mb-1">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <p className="font-mono text-[10px] text-ink/70 leading-relaxed">{ann}</p>
+                      <p className="font-mono text-[11px] text-ink/70 leading-relaxed">{ann}</p>
                     </div>
                   ))}
                 </div>
@@ -986,7 +986,7 @@ export default function MatchmakerPage() {
             <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">Aperçu produit</span>
             <h2
               id="screenshots-heading"
-              className="mt-3 font-sans font-light text-system-green leading-tight"
+              className="mt-3 font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
               Le produit, en contexte.
@@ -1000,7 +1000,7 @@ export default function MatchmakerPage() {
                 <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
                 <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
                 <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
-                <span className="flex-1 mx-4 h-4 bg-architect-paper/10 border border-architect-paper/10 font-mono text-[8px] text-chrome-light text-center leading-4 tracking-wider">
+                <span className="flex-1 mx-4 h-4 bg-architect-paper/15 border border-architect-paper/10 font-mono text-[11px] text-chrome-light text-center leading-4 tracking-wider">
                   matchmaker.liteops.fr
                 </span>
               </div>
@@ -1023,7 +1023,7 @@ export default function MatchmakerPage() {
                           }).join(" ")}
                           fill="none"
                           stroke="#9A968E"
-                          strokeWidth="0.5"
+                          strokeWidth="0.8"
                         />
                       ))}
                       {/* Radar axes */}
@@ -1036,7 +1036,7 @@ export default function MatchmakerPage() {
                             x2={100 + 80 * Math.cos(angle)}
                             y2={100 + 80 * Math.sin(angle)}
                             stroke="#B8B5AE"
-                            strokeWidth="0.5"
+                            strokeWidth="0.8"
                           />
                         );
                       })}
@@ -1055,7 +1055,7 @@ export default function MatchmakerPage() {
                     </svg>
                   </div>
 
-                  <p className="font-mono text-[10px] tracking-widest text-steel uppercase mb-3">
+                  <p className="font-mono text-[11px] tracking-widest text-steel uppercase mb-3">
                     En cours de développement
                   </p>
                   <p className="font-sans text-sm text-ink/50 leading-relaxed mb-6">
@@ -1088,7 +1088,7 @@ export default function MatchmakerPage() {
             <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">Variantes</span>
             <h2
               id="specialists-heading"
-              className="mt-3 font-sans font-light text-system-green leading-tight"
+              className="mt-3 font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
               Pour chaque contexte.
@@ -1100,7 +1100,7 @@ export default function MatchmakerPage() {
               <SectionReveal key={spec.code} delay={i * 0.1}>
                 <div className="border border-rule bg-architect-paper p-8 h-full">
                   <div className="flex items-center gap-3 mb-6">
-                    <span className="font-mono text-[10px] tracking-widest text-signal-green bg-system-green px-2 py-0.5">
+                    <span className="font-mono text-[11px] tracking-widest text-signal-green bg-system-green px-2 py-0.5">
                       {spec.code}
                     </span>
                   </div>
@@ -1112,13 +1112,13 @@ export default function MatchmakerPage() {
                     {spec.name}
                   </h3>
                   <p className="font-mono text-xs text-chrome-dark tracking-widest uppercase mb-4">{spec.tagline}</p>
-                  <p className="font-sans text-sm leading-relaxed text-ink/65 mb-6">{spec.description}</p>
+                  <p className="font-sans text-sm leading-relaxed text-ink/75 mb-6">{spec.description}</p>
 
                   <div className="border-t border-rule pt-6">
-                    <p className="font-mono text-[9px] tracking-widest text-chrome-dark uppercase mb-3">Cas d'usage</p>
+                    <p className="font-mono text-[11px] tracking-widest text-chrome-dark uppercase mb-3">Cas d'usage</p>
                     <ul className="space-y-2">
                       {spec.uses.map(use => (
-                        <li key={use} className="flex items-start gap-2 font-mono text-[10px] text-ink/65">
+                        <li key={use} className="flex items-start gap-2 font-mono text-[11px] text-ink/75">
                           <span className="text-chrome-dark shrink-0 mt-0.5">—</span>
                           {use}
                         </li>
@@ -1144,7 +1144,7 @@ export default function MatchmakerPage() {
             <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">Tarification</span>
             <h2
               id="pricing-heading"
-              className="mt-3 font-sans font-light text-system-green leading-tight"
+              className="mt-3 font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
               Simple et transparent.
@@ -1167,14 +1167,14 @@ export default function MatchmakerPage() {
                 >
                   {tier.highlight && (
                     <div className="mb-4">
-                      <span className="font-mono text-[9px] tracking-widest text-signal-green uppercase border border-signal-green px-2 py-0.5">
+                      <span className="font-mono text-[11px] tracking-widest text-signal-green uppercase border border-signal-green px-2 py-0.5">
                         Recommandé
                       </span>
                     </div>
                   )}
 
-                  <span className="font-mono text-[10px] tracking-widest text-chrome-dark block mb-2">{tier.code}</span>
-                  <h3 className="font-sans font-light text-system-green text-2xl mb-1">{tier.name}</h3>
+                  <span className="font-mono text-[11px] tracking-widest text-chrome-dark block mb-2">{tier.code}</span>
+                  <h3 className="font-sans font-normal md:font-light text-system-green text-2xl mb-1">{tier.name}</h3>
 
                   <div className="flex items-baseline gap-1 mb-3">
                     <span
@@ -1190,12 +1190,12 @@ export default function MatchmakerPage() {
                     )}
                   </div>
 
-                  <p className="font-sans text-sm text-ink/60 leading-relaxed mb-6">{tier.description}</p>
+                  <p className="font-sans text-sm text-ink/70 leading-relaxed mb-6">{tier.description}</p>
 
                   <div className="border-t border-rule pt-6 flex-1">
                     <ul className="space-y-2">
                       {tier.features.map(feat => (
-                        <li key={feat} className="flex items-start gap-2 font-mono text-[10px] text-ink/65">
+                        <li key={feat} className="flex items-start gap-2 font-mono text-[11px] text-ink/75">
                           <span className="text-signal-green shrink-0 mt-0.5">✓</span>
                           {feat}
                         </li>
@@ -1241,12 +1241,12 @@ export default function MatchmakerPage() {
             <SectionReveal delay={0.05}>
               <Link
                 href="/agents/pilot"
-                className="group flex flex-col justify-between border border-architect-paper/20 p-8 hover:border-architect-paper/50 transition-all duration-300 min-h-[180px]"
+                className="group flex flex-col justify-between border border-architect-paper/30 p-8 hover:border-architect-paper/50 transition-all duration-300 min-h-[180px]"
               >
                 <div>
-                  <span className="font-mono text-[10px] tracking-widest text-chrome block mb-2">AG001</span>
+                  <span className="font-mono text-[11px] tracking-widest text-chrome block mb-2">AG001</span>
                   <h3
-                    className="font-sans font-light text-architect-paper mb-3"
+                    className="font-sans font-normal md:font-light text-architect-paper mb-3"
                     style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.5rem)" }}
                   >
                     PILOT
@@ -1266,12 +1266,12 @@ export default function MatchmakerPage() {
             <SectionReveal delay={0.1}>
               <Link
                 href="/agents/sailor"
-                className="group flex flex-col justify-between border border-architect-paper/20 p-8 hover:border-architect-paper/50 transition-all duration-300 min-h-[180px]"
+                className="group flex flex-col justify-between border border-architect-paper/30 p-8 hover:border-architect-paper/50 transition-all duration-300 min-h-[180px]"
               >
                 <div>
-                  <span className="font-mono text-[10px] tracking-widest text-chrome block mb-2">AG002</span>
+                  <span className="font-mono text-[11px] tracking-widest text-chrome block mb-2">AG002</span>
                   <h3
-                    className="font-sans font-light text-architect-paper mb-3"
+                    className="font-sans font-normal md:font-light text-architect-paper mb-3"
                     style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.5rem)" }}
                   >
                     SAILOR

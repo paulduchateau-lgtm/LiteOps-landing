@@ -157,7 +157,7 @@ export function Navigation() {
           "fixed top-0 left-0 right-0 z-50",
           "transition-all duration-300 ease-in-out",
           scrolled
-            ? "bg-architect-paper/85 backdrop-blur-md border-b border-chrome-light/50"
+            ? "bg-architect-paper/85 backdrop-blur-md border-b border-chrome-light/70"
             : "bg-transparent border-b border-transparent",
         ].join(" ")}
         role="banner"
@@ -263,7 +263,7 @@ export function Navigation() {
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             className={[
               "fixed top-20 left-0 right-0 z-40 md:hidden",
-              "bg-warm-paper border-b border-chrome-light/40",
+              "bg-warm-paper border-b border-chrome-light/60",
               "px-8 pb-8 pt-4",
             ].join(" ")}
             role="dialog"

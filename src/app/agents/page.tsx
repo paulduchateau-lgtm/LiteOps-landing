@@ -145,14 +145,14 @@ function AgentCardComponent({ agent, index }: { agent: AgentCard; index: number 
                   }`}
                 />
                 <span
-                  className={`font-mono text-[10px] tracking-[0.2em] uppercase ${
+                  className={`font-mono text-[11px] tracking-[0.2em] uppercase ${
                     agent.status === "ACTIF" ? "text-signal-green" : "text-steel"
                   }`}
                 >
                   {agent.status}
                 </span>
               </div>
-              <span className="font-mono text-[10px] text-chrome-dark tracking-widest uppercase">
+              <span className="font-mono text-[11px] text-chrome-dark tracking-widest uppercase">
                 {agent.code}
               </span>
             </div>
@@ -160,7 +160,7 @@ function AgentCardComponent({ agent, index }: { agent: AgentCard; index: number 
             {/* Bottom: Info */}
             <div>
               {/* Agent name */}
-              <h2 className="font-sans font-light text-architect-paper leading-none mb-2"
+              <h2 className="font-sans font-normal md:font-light text-architect-paper leading-none mb-2"
                 style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
               >
                 {agent.name}
@@ -172,7 +172,7 @@ function AgentCardComponent({ agent, index }: { agent: AgentCard; index: number 
               </p>
 
               {/* Description */}
-              <p className="font-sans text-sm text-architect-paper/70 leading-relaxed mb-6 max-w-sm">
+              <p className="font-sans text-sm text-architect-paper/80 leading-relaxed mb-6 max-w-sm">
                 {agent.description}
               </p>
 
@@ -180,11 +180,11 @@ function AgentCardComponent({ agent, index }: { agent: AgentCard; index: number 
               <div className="flex flex-wrap items-center gap-1.5 mb-6">
                 {agent.operators.map((op, i) => (
                   <span key={op} className="flex items-center gap-1.5">
-                    <span className="font-mono text-[9px] text-architect-paper/50 tracking-wider uppercase px-1.5 py-0.5 border border-architect-paper/15">
+                    <span className="font-mono text-[11px] text-architect-paper/70 tracking-wider uppercase px-1.5 py-0.5 border border-architect-paper/25">
                       {op}
                     </span>
                     {i < agent.operators.length - 1 && (
-                      <span className="text-chrome-dark text-[9px]" aria-hidden="true">→</span>
+                      <span className="text-chrome-dark text-[11px]" aria-hidden="true">→</span>
                     )}
                   </span>
                 ))}
@@ -195,12 +195,12 @@ function AgentCardComponent({ agent, index }: { agent: AgentCard; index: number 
                 {agent.variants.map((v) => (
                   <div
                     key={v.code}
-                    className="px-2 py-1 border border-architect-paper/20 bg-architect-paper/10 backdrop-blur-sm"
+                    className="px-2 py-1 border border-architect-paper/30 bg-architect-paper/15 backdrop-blur-sm"
                   >
-                    <span className="font-mono text-[10px] text-architect-paper/60 tracking-wider uppercase">
+                    <span className="font-mono text-[11px] text-architect-paper/70 tracking-wider uppercase">
                       {v.code}
                     </span>
-                    <span className="font-mono text-[10px] text-architect-paper/40 ml-1.5 tracking-wider">
+                    <span className="font-mono text-[11px] text-architect-paper/55 ml-1.5 tracking-wider">
                       {v.label}
                     </span>
                   </div>
@@ -245,14 +245,14 @@ export default function AgentsPage() {
               Agents
             </span>
             <h1
-              className="font-sans font-light text-architect-paper leading-[0.95] tracking-tight mb-6"
+              className="font-sans font-normal md:font-light text-architect-paper leading-[0.95] tracking-tight mb-6"
               style={{ fontSize: "clamp(2.4rem, 5vw, 4.5rem)" }}
             >
               Trois agents.
               <br />
               Un but.
             </h1>
-            <p className="text-lg text-architect-paper/60 font-sans max-w-lg leading-relaxed">
+            <p className="text-lg text-architect-paper/70 font-sans max-w-lg leading-relaxed">
               Chaque agent assemble des opérateurs spécialisés pour résoudre un problème métier précis.
               Pipeline documenté. Résultat mesurable.
             </p>
@@ -272,14 +272,14 @@ export default function AgentsPage() {
       </section>
 
       {/* Comparison table */}
-      <section className="bg-warm-paper py-24 lg:py-32 border-t border-chrome-light/50">
+      <section className="bg-warm-paper py-24 lg:py-32 border-t border-chrome-light/70">
         <div className="max-w-7xl mx-auto px-8 lg:px-20">
           <Reveal className="mb-12">
             <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark block mb-3">
               Comparaison
             </span>
             <h2
-              className="font-sans font-light text-system-green leading-tight"
+              className="font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)" }}
             >
               Quel agent pour quel besoin ?
@@ -291,13 +291,13 @@ export default function AgentsPage() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b border-chrome">
-                    <th className="text-left py-4 pr-6 font-mono text-[10px] tracking-[0.2em] uppercase text-steel w-1/4">
+                    <th className="text-left py-4 pr-6 font-mono text-[11px] tracking-[0.2em] uppercase text-steel w-1/4">
                       &nbsp;
                     </th>
                     {AGENTS.map((a) => (
                       <th
                         key={a.code}
-                        className="text-left py-4 px-4 font-mono text-[10px] tracking-[0.2em] uppercase text-ink w-1/4"
+                        className="text-left py-4 px-4 font-mono text-[11px] tracking-[0.2em] uppercase text-ink w-1/4"
                       >
                         <span className="text-chrome-dark">{a.code}</span>
                         <span className="ml-2">{a.name}</span>
@@ -332,8 +332,8 @@ export default function AgentsPage() {
                       values: ["Actif", "Actif", "En développement"],
                     },
                   ].map((row) => (
-                    <tr key={row.label} className="border-b border-chrome-light/50">
-                      <td className="py-3 pr-6 font-mono text-[10px] tracking-wider uppercase text-steel align-top">
+                    <tr key={row.label} className="border-b border-chrome-light/70">
+                      <td className="py-3 pr-6 font-mono text-[11px] tracking-wider uppercase text-steel align-top">
                         {row.label}
                       </td>
                       {row.values.map((val, i) => (
@@ -355,7 +355,7 @@ export default function AgentsPage() {
         <div className="max-w-3xl mx-auto px-8 lg:px-20">
           <Reveal>
             <p
-              className="font-sans font-light text-architect-paper/90 leading-tight mb-8"
+              className="font-sans font-normal md:font-light text-architect-paper/90 leading-tight mb-8"
               style={{ fontSize: "clamp(1.4rem, 3vw, 2.2rem)" }}
             >
               Un agent ne fait pas tout.

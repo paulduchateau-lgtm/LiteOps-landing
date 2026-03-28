@@ -174,7 +174,7 @@ function NamibiaHubDiagram() {
         r={orbitR}
         fill="none"
         stroke="#CDC9C2"
-        strokeWidth="0.5"
+        strokeWidth="0.8"
         strokeDasharray="3 4"
       />
 
@@ -194,7 +194,7 @@ function NamibiaHubDiagram() {
             x2={x2}
             y2={y2}
             stroke="#B8B5AE"
-            strokeWidth="0.75"
+            strokeWidth="1"
             strokeOpacity="0.7"
           />
         );
@@ -265,22 +265,22 @@ function SystemDiagram({ title, status, objective, agents, flow, connectedSystem
   const orbitR = 90;
 
   return (
-    <div className="border border-chrome-light/40 bg-warm-paper space-y-5">
+    <div className="border border-chrome-light/60 bg-warm-paper space-y-5">
       {/* Header */}
       <div className="flex items-start justify-between gap-4 px-8 lg:px-10 pt-8 lg:pt-10">
         <div>
-          <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-steel mb-1">Système</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-steel mb-1">Système</p>
           <h3 className="font-mono text-sm font-medium text-ink">{title}</h3>
         </div>
         {status && (
-          <span className="flex items-center gap-1.5 font-mono text-[9px] text-signal-green whitespace-nowrap">
+          <span className="flex items-center gap-1.5 font-mono text-[11px] text-signal-green whitespace-nowrap">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-signal-green" aria-hidden="true" />
             {status}
           </span>
         )}
       </div>
 
-      <p className="text-xs text-ink/65 leading-relaxed px-8 lg:px-10">{objective}</p>
+      <p className="text-xs text-ink/75 leading-relaxed px-8 lg:px-10">{objective}</p>
 
       {/* SVG */}
       <div className="px-8 lg:px-12">
@@ -305,7 +305,7 @@ function SystemDiagram({ title, status, objective, agents, flow, connectedSystem
             r={orbitR}
             fill="none"
             stroke="#CDC9C2"
-            strokeWidth="0.5"
+            strokeWidth="0.8"
             strokeDasharray="3 4"
           />
 
@@ -325,7 +325,7 @@ function SystemDiagram({ title, status, objective, agents, flow, connectedSystem
                 x2={x2}
                 y2={y2}
                 stroke="#B8B5AE"
-                strokeWidth="0.75"
+                strokeWidth="1"
                 strokeOpacity="0.7"
               />
             );
@@ -405,10 +405,10 @@ function SystemDiagram({ title, status, objective, agents, flow, connectedSystem
                   x2={x - 30}
                   y2={y + 8}
                   stroke="#B8B5AE"
-                  strokeWidth="0.5"
+                  strokeWidth="0.8"
                   strokeDasharray="2 3"
                 />
-                <rect x={x - 28} y={y} width={60} height={18} fill="#F5F2ED" stroke="#B8B5AE" strokeWidth="0.75" />
+                <rect x={x - 28} y={y} width={60} height={18} fill="#F5F2ED" stroke="#B8B5AE" strokeWidth="1" />
                 <text
                   x={x - 28 + 30}
                   y={y + 9}
@@ -428,15 +428,15 @@ function SystemDiagram({ title, status, objective, agents, flow, connectedSystem
 
       {/* Process flow */}
       <div className="px-8 lg:px-10 pb-8 lg:pb-10">
-        <p className="font-mono text-[9px] uppercase tracking-[0.15em] text-chrome-dark mb-2">Flux</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-chrome-dark mb-2">Flux</p>
         <div className="flex items-center gap-0" role="list" aria-label="Étapes du processus">
           {flow.map((step, i) => (
             <div key={step} className="flex items-center" role="listitem">
-              <span className="font-mono text-[9px] font-medium tracking-wider text-steel bg-green-tint border border-chrome-light/40 px-2 py-1">
+              <span className="font-mono text-[11px] font-medium tracking-wider text-steel bg-green-tint border border-chrome-light/60 px-2 py-1">
                 {step}
               </span>
               {i < flow.length - 1 && (
-                <span className="font-mono text-[8px] text-chrome-dark px-1" aria-hidden="true">
+                <span className="font-mono text-[10px] text-chrome-dark px-1" aria-hidden="true">
                   →
                 </span>
               )}
@@ -468,7 +468,7 @@ function LayerToggles() {
             id={`layer-tab-${key}`}
             onClick={() => setActive(key)}
             className={[
-              "font-mono text-[10px] uppercase tracking-[0.15em] px-4 py-2 border transition-all duration-200",
+              "font-mono text-[11px] uppercase tracking-[0.15em] px-4 py-2 border transition-all duration-200",
               active === key
                 ? "bg-system-green border-signal-green text-signal-green"
                 : "bg-transparent border-chrome text-steel hover:border-chrome-dark hover:text-ink",
@@ -490,10 +490,10 @@ function LayerToggles() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="border border-chrome-light/40 bg-warm-paper p-6 space-y-4"
+          className="border border-chrome-light/60 bg-warm-paper p-6 space-y-4"
         >
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-steel mb-1">
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-steel mb-1">
               {LAYERS[active].label}
             </p>
             <p className="text-sm text-ink">{LAYERS[active].description}</p>
@@ -502,7 +502,7 @@ function LayerToggles() {
             {LAYERS[active].items.map((item) => (
               <li key={item} className="flex items-start gap-3">
                 <span className="mt-1.5 shrink-0 w-1 h-1 rounded-full bg-chrome-dark" aria-hidden="true" />
-                <span className="text-sm text-ink/65 leading-relaxed">{item}</span>
+                <span className="text-sm text-ink/75 leading-relaxed">{item}</span>
               </li>
             ))}
           </ul>
@@ -543,7 +543,7 @@ function ContactForm() {
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="contact-name" className="block font-mono text-[10px] uppercase tracking-[0.15em] text-steel mb-1.5">
+          <label htmlFor="contact-name" className="block font-mono text-[11px] uppercase tracking-[0.15em] text-steel mb-1.5">
             Nom
           </label>
           <input
@@ -556,7 +556,7 @@ function ContactForm() {
           />
         </div>
         <div>
-          <label htmlFor="contact-org" className="block font-mono text-[10px] uppercase tracking-[0.15em] text-steel mb-1.5">
+          <label htmlFor="contact-org" className="block font-mono text-[11px] uppercase tracking-[0.15em] text-steel mb-1.5">
             Organisation
           </label>
           <input
@@ -570,7 +570,7 @@ function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="contact-email" className="block font-mono text-[10px] uppercase tracking-[0.15em] text-steel mb-1.5">
+        <label htmlFor="contact-email" className="block font-mono text-[11px] uppercase tracking-[0.15em] text-steel mb-1.5">
           Email
         </label>
         <input
@@ -584,7 +584,7 @@ function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="contact-context" className="block font-mono text-[10px] uppercase tracking-[0.15em] text-steel mb-1.5">
+        <label htmlFor="contact-context" className="block font-mono text-[11px] uppercase tracking-[0.15em] text-steel mb-1.5">
           Contexte
         </label>
         <textarea
@@ -642,7 +642,7 @@ export default function SystemesPage() {
         <div className="relative max-w-7xl mx-auto px-8 lg:px-20 py-32 lg:py-40">
           {/* Breadcrumb */}
           <nav aria-label="Fil d'ariane" className="mb-8">
-            <ol className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-chrome-light/70">
+            <ol className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.15em] text-chrome-light/70">
               <li>
                 <Link href="/" className="hover:text-chrome-light transition-colors">
                   Accueil
@@ -661,13 +661,13 @@ export default function SystemesPage() {
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-3xl"
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-chrome mb-4">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-chrome mb-4">
               Infrastructure intelligente
             </p>
             <h1 className="font-sans text-4xl lg:text-5xl font-medium text-architect-paper leading-tight mb-6">
               Les Systèmes
             </h1>
-            <p className="font-sans text-base lg:text-lg text-architect-paper/70 leading-relaxed max-w-2xl">
+            <p className="font-sans text-base lg:text-lg text-architect-paper/80 leading-relaxed max-w-2xl">
               Un système est un ensemble d&apos;agents orchestrés, connectés à une plateforme commune.
               Il répond à un objectif macro de votre organisation.
             </p>
@@ -678,7 +678,7 @@ export default function SystemesPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 1 — NAMIBIA HUB                                            */}
       {/* ------------------------------------------------------------------ */}
-      <section id="namibia" className="bg-architect-paper border-b border-chrome-light/40" aria-labelledby="namibia-heading">
+      <section id="namibia" className="bg-architect-paper border-b border-chrome-light/60" aria-labelledby="namibia-heading">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-24 lg:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Text */}
@@ -691,13 +691,13 @@ export default function SystemesPage() {
               className="space-y-8"
             >
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-steel mb-3">
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-steel mb-3">
                   Plateforme centrale
                 </p>
                 <h2 id="namibia-heading" className="font-sans text-3xl font-medium text-ink mb-5">
                   Namibia — Le concentrateur de services
                 </h2>
-                <p className="text-base text-ink/65 leading-relaxed">
+                <p className="text-base text-ink/75 leading-relaxed">
                   Namibia est la plateforme centrale de Lite Ops. Elle agrège les données issues de
                   l&apos;ensemble des agents d&apos;un client, gère la mémoire partagée entre agents,
                   et offre un hub de services communs.
@@ -706,7 +706,7 @@ export default function SystemesPage() {
 
               {/* Feature list */}
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-steel mb-4">
+                <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-steel mb-4">
                   Services communs
                 </p>
                 <ul className="grid grid-cols-2 gap-3" role="list">
@@ -720,14 +720,14 @@ export default function SystemesPage() {
                   ].map((feature) => (
                     <li key={feature} className="flex items-center gap-2.5">
                       <span className="shrink-0 w-1 h-1 rounded-full bg-chrome" aria-hidden="true" />
-                      <span className="font-mono text-xs text-ink/65">{feature}</span>
+                      <span className="font-mono text-xs text-ink/75">{feature}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
               {/* Photo accent */}
-              <div className="relative h-40 overflow-hidden border border-chrome-light/40">
+              <div className="relative h-40 overflow-hidden border border-chrome-light/60">
                 <Image
                   src="/photos/photo-1679587246899-8b9172fc78e2.avif"
                   alt="Infrastructure Namibia — plateforme centrale Lite Ops"
@@ -736,7 +736,7 @@ export default function SystemesPage() {
                 />
                 <div className="absolute inset-0 bg-system-green/40" aria-hidden="true" />
                 <div className="absolute bottom-3 left-3">
-                  <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-chrome-light">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-chrome-light">
                     NAMIBIA / v1.0 / ACTIF
                   </span>
                 </div>
@@ -755,15 +755,15 @@ export default function SystemesPage() {
               <NamibiaHubDiagram />
 
               {/* Legend */}
-              <div className="w-full border border-chrome-light/40 bg-warm-paper p-4 space-y-2">
-                <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-steel mb-3">Legende</p>
+              <div className="w-full border border-chrome-light/60 bg-warm-paper p-4 space-y-2">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-steel mb-3">Legende</p>
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-system-green border border-signal-green flex-shrink-0" aria-hidden="true" />
-                  <span className="font-mono text-[10px] text-chrome-dark">Hub Namibia — concentrateur central</span>
+                  <span className="font-mono text-[11px] text-chrome-dark">Hub Namibia — concentrateur central</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded-full bg-architect-paper border border-chrome-light flex-shrink-0" aria-hidden="true" />
-                  <span className="font-mono text-[10px] text-chrome-dark">Service commun expose</span>
+                  <span className="font-mono text-[11px] text-chrome-dark">Service commun expose</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div
@@ -771,7 +771,7 @@ export default function SystemesPage() {
                     style={{ background: "#B8B5AE", opacity: 0.8 }}
                     aria-hidden="true"
                   />
-                  <span className="font-mono text-[10px] text-chrome-dark">Canal de communication</span>
+                  <span className="font-mono text-[11px] text-chrome-dark">Canal de communication</span>
                 </div>
               </div>
             </motion.div>
@@ -782,7 +782,7 @@ export default function SystemesPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 2 — SYSTEM EXAMPLES                                        */}
       {/* ------------------------------------------------------------------ */}
-      <section className="bg-warm-paper border-t border-chrome-light/40 border-b border-chrome-light/40" aria-labelledby="exemples-heading">
+      <section className="bg-warm-paper border-t border-chrome-light/60 border-b border-chrome-light/60" aria-labelledby="exemples-heading">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-24 lg:py-32">
           <motion.div
             initial="hidden"
@@ -792,7 +792,7 @@ export default function SystemesPage() {
             custom={0}
             className="mb-12"
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-steel mb-3">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-steel mb-3">
               Exemples concrets
             </p>
             <h2 id="exemples-heading" className="font-sans text-3xl font-medium text-ink">
@@ -839,7 +839,7 @@ export default function SystemesPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 3 — LAYERS                                                 */}
       {/* ------------------------------------------------------------------ */}
-      <section className="bg-architect-paper border-b border-chrome-light/40" aria-labelledby="layers-heading">
+      <section className="bg-architect-paper border-b border-chrome-light/60" aria-labelledby="layers-heading">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-24 lg:py-32">
           <motion.div
             initial="hidden"
@@ -849,13 +849,13 @@ export default function SystemesPage() {
             custom={0}
             className="mb-12 max-w-2xl"
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-steel mb-3">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-steel mb-3">
               Architecture en couches
             </p>
             <h2 id="layers-heading" className="font-sans text-3xl font-medium text-ink mb-4">
               Les couches d&apos;un système
             </h2>
-            <p className="text-base text-ink/65 leading-relaxed">
+            <p className="text-base text-ink/75 leading-relaxed">
               Chaque système Lite Ops intègre trois couches superposées qui travaillent de concert
               pour assurer performance technique, pertinence métier et adoption durable.
             </p>
@@ -876,7 +876,7 @@ export default function SystemesPage() {
       {/* ------------------------------------------------------------------ */}
       {/* SECTION 4 — TECHNICAL CAPABILITIES                                 */}
       {/* ------------------------------------------------------------------ */}
-      <section className="bg-warm-paper border-b border-chrome-light/40" aria-labelledby="capabilities-heading">
+      <section className="bg-warm-paper border-b border-chrome-light/60" aria-labelledby="capabilities-heading">
         <div className="max-w-7xl mx-auto px-8 lg:px-20 py-20 lg:py-28">
           <motion.div
             initial="hidden"
@@ -886,7 +886,7 @@ export default function SystemesPage() {
             custom={0}
             className="mb-12"
           >
-            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-steel mb-3">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-steel mb-3">
               Sous le capot
             </p>
             <h2 id="capabilities-heading" className="font-sans text-3xl font-medium text-ink">
@@ -903,15 +903,15 @@ export default function SystemesPage() {
                 viewport={{ once: true, margin: "-60px" }}
                 variants={fadeUp}
                 custom={i}
-                className="border border-chrome-light/40 bg-architect-paper p-5 group hover:border-chrome-dark transition-colors duration-200"
+                className="border border-chrome-light/60 bg-architect-paper p-5 group hover:border-chrome-dark transition-colors duration-200"
               >
                 <div className="flex items-center gap-2 mb-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-chrome-dark flex-shrink-0" aria-hidden="true" />
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.15em] text-ink font-medium">
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink font-medium">
                     {cap.label}
                   </dt>
                 </div>
-                <dd className="text-sm text-ink/65 leading-relaxed">{cap.description}</dd>
+                <dd className="text-sm text-ink/75 leading-relaxed">{cap.description}</dd>
               </motion.div>
             ))}
           </dl>
@@ -934,14 +934,14 @@ export default function SystemesPage() {
               className="space-y-6"
             >
               <div>
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-chrome-light/70 mb-3">
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-chrome-light/70 mb-3">
                   Passons à l&apos;action
                 </p>
                 <h2 id="cta-heading" className="font-sans text-3xl lg:text-4xl font-medium text-architect-paper leading-tight">
                   Construisons votre système
                 </h2>
               </div>
-              <p className="text-base text-architect-paper/70 leading-relaxed">
+              <p className="text-base text-architect-paper/80 leading-relaxed">
                 Chaque système Lite Ops est conçu sur mesure autour de votre objectif métier.
                 Décrivez-nous votre besoin — nous revenons vers vous avec une proposition d&apos;architecture
                 en 48h.
@@ -957,7 +957,7 @@ export default function SystemesPage() {
                 ].map((stat) => (
                   <div key={stat.label} className="space-y-1">
                     <p className="font-mono text-xl font-medium text-architect-paper">{stat.value}</p>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.15em] text-chrome-light">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-chrome-light">
                       {stat.label}
                     </p>
                   </div>

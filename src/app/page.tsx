@@ -132,7 +132,7 @@ function HeroSection() {
           <span className="font-mono text-xs tracking-[0.2em] uppercase text-signal-green">
             STATUT
           </span>
-          <span className="text-signal-green text-[10px]" aria-hidden="true">
+          <span className="text-signal-green text-[11px]" aria-hidden="true">
             ●
           </span>
           <span className="font-mono text-xs tracking-[0.2em] uppercase text-signal-green">
@@ -146,7 +146,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: ES, delay: 0.1 }}
-            className="font-sans font-light text-system-green leading-[0.92] tracking-tight"
+            className="font-sans font-normal md:font-light text-system-green leading-[0.92] tracking-tight"
             style={{ fontSize: "clamp(2.8rem, 6vw, 5.5rem)" }}
           >
             Intelligent
@@ -162,7 +162,7 @@ function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: ES, delay: 0.35 }}
-            className="mt-8 text-lg text-ink/60 font-sans max-w-sm leading-relaxed"
+            className="mt-8 text-lg text-ink/70 font-sans max-w-sm leading-relaxed"
           >
             Des systèmes conçus pour opérer.
             <br />
@@ -278,7 +278,7 @@ function OriginsSection() {
 
           <motion.h2
             variants={fadeUp}
-            className="font-sans font-light text-system-green leading-tight"
+            className="font-sans font-normal md:font-light text-system-green leading-tight"
             style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
           >
             Nous concevons des
@@ -290,7 +290,7 @@ function OriginsSection() {
 
           <motion.p
             variants={fadeUp}
-            className="text-ink/65 leading-relaxed max-w-lg"
+            className="text-ink/75 leading-relaxed max-w-lg"
           >
             Il y a des ingénieurs qui fabriquent des choses dont ils sont fiers.
             Des gens qui testent avant de livrer, qui mesurent avant d&apos;affirmer.
@@ -331,7 +331,7 @@ function TransitionBanner() {
         initial={{ opacity: 0, y: 16 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7, ease: ES }}
-        className="font-sans font-light text-system-green text-2xl lg:text-3xl tracking-tight"
+        className="font-sans font-normal md:font-light text-system-green text-2xl lg:text-3xl tracking-tight"
       >
         De la conception a l&apos;utilisation quotidienne
       </motion.p>
@@ -413,15 +413,15 @@ function DiagramBlock({
       <p
         className={`font-mono leading-none text-center ${
           isHighlighted ? "text-moss" : "text-ink/70"
-        } ${isSecondary ? "text-[10px]" : "text-[9px]"} font-medium tracking-wider uppercase transition-colors duration-150`}
+        } ${isSecondary ? "text-[11px]" : "text-[11px]"} font-medium tracking-wider uppercase transition-colors duration-150`}
       >
         {node.label}
       </p>
       {node.sublabel && (
         <p
           className={`font-mono leading-none text-center mt-0.5 ${
-            isHighlighted ? "text-chrome" : "text-ink/40"
-          } text-[8px] tracking-wider uppercase transition-colors duration-150`}
+            isHighlighted ? "text-chrome" : "text-ink/55"
+          } text-[11px] tracking-wider uppercase transition-colors duration-150`}
         >
           {node.sublabel}
         </p>
@@ -472,7 +472,7 @@ function HierarchyDiagram() {
             Architecture
           </span>
           <h2
-            className="mt-3 font-sans font-light text-system-green leading-tight"
+            className="mt-3 font-sans font-normal md:font-light text-system-green leading-tight"
             style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
           >
             Trois niveaux. Une logique.
@@ -492,10 +492,10 @@ function HierarchyDiagram() {
             {/* Row: OPERATEURS */}
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-4">
-                <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-steel w-24 shrink-0">
+                <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-steel w-24 shrink-0">
                   Opérateurs
                 </span>
-                <div className="h-px flex-1 bg-chrome-light/60" />
+                <div className="h-px flex-1 bg-chrome-light/80" />
               </div>
               <div
                 role="list"
@@ -527,7 +527,7 @@ function HierarchyDiagram() {
                   x2="12%"
                   y2="100%"
                   stroke="#D4D0C8"
-                  strokeWidth="0.75"
+                  strokeWidth="1"
                   strokeDasharray="3 3"
                 />
                 <line
@@ -536,7 +536,7 @@ function HierarchyDiagram() {
                   x2="52%"
                   y2="100%"
                   stroke="#D4D0C8"
-                  strokeWidth="0.75"
+                  strokeWidth="1"
                   strokeDasharray="3 3"
                 />
               </svg>
@@ -545,10 +545,10 @@ function HierarchyDiagram() {
             {/* Row: AGENTS */}
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-4">
-                <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-steel w-24 shrink-0">
+                <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-steel w-24 shrink-0">
                   Agents
                 </span>
-                <div className="h-px flex-1 bg-chrome-light/60" />
+                <div className="h-px flex-1 bg-chrome-light/80" />
               </div>
               <div
                 role="list"
@@ -580,7 +580,7 @@ function HierarchyDiagram() {
                   x2="4%"
                   y2="100%"
                   stroke="#D4D0C8"
-                  strokeWidth="0.75"
+                  strokeWidth="1"
                   strokeDasharray="3 3"
                 />
                 <line
@@ -589,7 +589,7 @@ function HierarchyDiagram() {
                   x2="4%"
                   y2="100%"
                   stroke="#D4D0C8"
-                  strokeWidth="0.75"
+                  strokeWidth="1"
                   strokeDasharray="3 3"
                 />
               </svg>
@@ -598,10 +598,10 @@ function HierarchyDiagram() {
             {/* Row: SYSTEMES */}
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-4">
-                <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-steel w-24 shrink-0">
+                <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-steel w-24 shrink-0">
                   Systèmes
                 </span>
-                <div className="h-px flex-1 bg-chrome-light/60" />
+                <div className="h-px flex-1 bg-chrome-light/80" />
               </div>
               <div
                 role="list"
@@ -632,11 +632,11 @@ function HierarchyDiagram() {
                       backgroundColor:
                         hoveredId === node.id ? "#EFF5E6" : "transparent",
                     }}
-                    className="px-3 py-1.5 border border-rule/50 cursor-default"
+                    className="px-3 py-1.5 border border-rule/70 cursor-default"
                   >
                     <span
-                      className={`font-mono text-[9px] tracking-wider uppercase transition-colors duration-150 ${
-                        hoveredId === node.id ? "text-moss" : "text-ink/50"
+                      className={`font-mono text-[11px] tracking-wider uppercase transition-colors duration-150 ${
+                        hoveredId === node.id ? "text-moss" : "text-ink/60"
                       }`}
                     >
                       {node.label}
@@ -648,11 +648,11 @@ function HierarchyDiagram() {
           </div>
 
           {/* Bottom caption */}
-          <div className="mt-12 pt-6 border-t border-chrome-light/50 pl-28 flex items-center gap-4">
-            <span className="font-mono text-[10px] text-steel/70 uppercase tracking-widest">
+          <div className="mt-12 pt-6 border-t border-chrome-light/70 pl-28 flex items-center gap-4">
+            <span className="font-mono text-[11px] text-steel/70 uppercase tracking-widest">
               Note:
             </span>
-            <p className="font-mono text-[10px] text-ink/50 leading-relaxed max-w-xl">
+            <p className="font-mono text-[11px] text-ink/60 leading-relaxed max-w-xl">
               Un système est un module dans vos opérations. Les opérateurs sont
               les briques, les agents sont les spécialistes, les systèmes sont
               les produits déployés.
@@ -666,7 +666,7 @@ function HierarchyDiagram() {
             fill="none"
             aria-hidden="true"
           >
-            <path d="M0 12 L0 0 L12 0" stroke="currentColor" strokeWidth="0.75" />
+            <path d="M0 12 L0 0 L12 0" stroke="currentColor" strokeWidth="1" />
           </svg>
           <svg
             className="absolute bottom-0 right-0 w-6 h-6 text-chrome"
@@ -674,7 +674,7 @@ function HierarchyDiagram() {
             fill="none"
             aria-hidden="true"
           >
-            <path d="M24 12 L24 24 L12 24" stroke="currentColor" strokeWidth="0.75" />
+            <path d="M24 12 L24 24 L12 24" stroke="currentColor" strokeWidth="1" />
           </svg>
         </motion.div>
       </div>
@@ -791,11 +791,11 @@ function AgentPreviewCard({ agent }: { agent: AgentCard }) {
             />
           </div>
 
-          <h3 className="font-sans font-light text-architect-paper text-3xl leading-tight mb-3">
+          <h3 className="font-sans font-normal md:font-light text-architect-paper text-3xl leading-tight mb-3">
             {agent.name}
           </h3>
 
-          <p className="font-mono text-sm text-architect-paper/70 leading-relaxed mb-6">
+          <p className="font-mono text-sm text-architect-paper/80 leading-relaxed mb-6">
             {agent.description}
           </p>
 
@@ -805,12 +805,12 @@ function AgentPreviewCard({ agent }: { agent: AgentCard }) {
               {agent.subCards.map((sub) => (
                 <div
                   key={sub.code}
-                  className="px-2 py-1 border border-architect-paper/20 bg-architect-paper/10 backdrop-blur-sm"
+                  className="px-2 py-1 border border-architect-paper/30 bg-architect-paper/15 backdrop-blur-sm"
                 >
-                  <span className="font-mono text-[10px] text-architect-paper/60 tracking-wider uppercase">
+                  <span className="font-mono text-[11px] text-architect-paper/70 tracking-wider uppercase">
                     {sub.code}
                   </span>
-                  <span className="font-mono text-[10px] text-architect-paper/40 ml-1 tracking-wider">
+                  <span className="font-mono text-[11px] text-architect-paper/55 ml-1 tracking-wider">
                     {sub.label}
                   </span>
                 </div>
@@ -847,7 +847,7 @@ function AgentsPreviewSection() {
             Nos agents
           </span>
           <h2
-            className="font-sans font-light text-system-green leading-tight"
+            className="font-sans font-normal md:font-light text-system-green leading-tight"
             style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
           >
             Trois agents. Un but.
@@ -907,7 +907,7 @@ function QuoteSection() {
           <span className="font-mono text-chrome text-4xl leading-none" aria-hidden="true">
             &ldquo;
           </span>
-          <blockquote className="font-sans font-light italic text-architect-paper/90 leading-relaxed mt-2 mb-6"
+          <blockquote className="font-sans font-normal md:font-light italic text-architect-paper/90 leading-relaxed mt-2 mb-6"
             style={{ fontSize: "clamp(1.3rem, 3vw, 2.2rem)" }}
           >
             Nos agents, nos systèmes, sont ceux que les utilisateurs adoptent
@@ -983,7 +983,7 @@ function AccordionItem({ layer }: { layer: Layer }) {
           <span className="font-mono text-xs text-chrome tracking-wider">{layer.number}</span>
           <span
             className={`font-sans font-medium transition-colors duration-200 ${
-              open ? "text-moss" : "text-ink/80 group-hover:text-ink"
+              open ? "text-moss" : "text-ink/70 group-hover:text-ink"
             }`}
           >
             {layer.label}
@@ -1007,7 +1007,7 @@ function AccordionItem({ layer }: { layer: Layer }) {
         transition={{ duration: 0.3, ease: ES }}
         className="overflow-hidden"
       >
-        <p className="pb-5 text-sm text-ink/60 leading-relaxed max-w-sm">
+        <p className="pb-5 text-sm text-ink/70 leading-relaxed max-w-sm">
           {layer.content}
         </p>
       </motion.div>
@@ -1029,7 +1029,7 @@ function LayersSection() {
               Expertise
             </span>
             <h2
-              className="mt-3 mb-10 font-sans font-light text-system-green leading-tight"
+              className="mt-3 mb-10 font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
               L&apos;expertise qui fait
@@ -1074,7 +1074,7 @@ function LayersSection() {
 
             {/* Floating label */}
             <div className="absolute -bottom-4 -left-4 bg-warm-paper border border-chrome-light px-4 py-3 shadow-sm">
-              <span className="font-mono text-[10px] text-steel uppercase tracking-widest block">
+              <span className="font-mono text-[11px] text-steel uppercase tracking-widest block">
                 Layers
               </span>
               <span className="font-mono text-xs text-ink mt-0.5 block">
@@ -1106,7 +1106,7 @@ function SovereigntySection() {
   return (
     <section
       ref={ref}
-      className="bg-green-tint py-32 lg:py-40 border-y border-chrome-light/50"
+      className="bg-green-tint py-32 lg:py-40 border-y border-chrome-light/70"
       aria-label="Souveraineté"
     >
       <div className="max-w-7xl mx-auto px-8 lg:px-20">
@@ -1125,7 +1125,7 @@ function SovereigntySection() {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.1, ease: ES }}
-              className="mt-3 mb-6 font-sans font-light text-system-green leading-tight"
+              className="mt-3 mb-6 font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
               Français, souverains,
@@ -1136,7 +1136,7 @@ function SovereigntySection() {
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-ink/65 leading-relaxed max-w-md mb-8"
+              className="text-ink/75 leading-relaxed max-w-md mb-8"
             >
               Nos modèles tournent chez vous ou chez Scaleway. Vos données ne
               quittent pas le territoire. Pas de dépendance à un vendor américain,
@@ -1162,12 +1162,12 @@ function SovereigntySection() {
             <div className="grid grid-cols-3 gap-0 mb-2">
               <div />
               <div className="px-3 py-2 bg-system-green text-center">
-                <span className="font-mono text-[10px] text-signal-green tracking-widest uppercase">
+                <span className="font-mono text-[11px] text-signal-green tracking-widest uppercase">
                   Lite Ops
                 </span>
               </div>
               <div className="px-3 py-2 bg-fog text-center border border-chrome-light">
-                <span className="font-mono text-[10px] text-ink/40 tracking-widest uppercase">
+                <span className="font-mono text-[11px] text-ink/55 tracking-widest uppercase">
                   SaaS
                 </span>
               </div>
@@ -1176,22 +1176,22 @@ function SovereigntySection() {
             {props.map((row, i) => (
               <div
                 key={row.label}
-                className={`grid grid-cols-3 gap-0 border-b border-chrome-light/50 ${
+                className={`grid grid-cols-3 gap-0 border-b border-chrome-light/70 ${
                   i === 0 ? "border-t" : ""
                 }`}
               >
                 <div className="py-3 pr-3">
-                  <span className="font-mono text-[10px] text-steel uppercase tracking-wider">
+                  <span className="font-mono text-[11px] text-steel uppercase tracking-wider">
                     {row.label}
                   </span>
                 </div>
-                <div className="px-3 py-3 bg-system-green/5 border-x border-chrome-light/30">
+                <div className="px-3 py-3 bg-system-green/5 border-x border-chrome-light/50">
                   <span className="font-sans text-xs text-moss font-medium">
                     {row.local}
                   </span>
                 </div>
                 <div className="px-3 py-3">
-                  <span className="font-sans text-xs text-ink/40">
+                  <span className="font-sans text-xs text-ink/55">
                     {row.saas}
                   </span>
                 </div>
@@ -1253,7 +1253,7 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-system-green/40 to-transparent" />
           <div className="absolute top-3 left-3">
-            <span className="font-mono text-[9px] text-chrome-light tracking-widest uppercase bg-system-green/80 px-2 py-1 backdrop-blur-sm">
+            <span className="font-mono text-[11px] text-chrome-light tracking-widest uppercase bg-system-green/80 px-2 py-1 backdrop-blur-sm">
               {item.tag}
             </span>
           </div>
@@ -1261,7 +1261,7 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
         <h3 className="font-sans font-medium text-system-green text-base mb-2 group-hover:text-moss transition-colors duration-200">
           {item.title}
         </h3>
-        <p className="text-sm text-ink/60 leading-relaxed flex-1">{item.excerpt}</p>
+        <p className="text-sm text-ink/70 leading-relaxed flex-1">{item.excerpt}</p>
         <div className="mt-4">
           <ArrowLink href="#">Lire la suite</ArrowLink>
         </div>
@@ -1283,7 +1283,7 @@ function NewsSection() {
               Ressources
             </span>
             <h2
-              className="font-sans font-light text-system-green leading-tight"
+              className="font-sans font-normal md:font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
               Perspectives
@@ -1325,7 +1325,7 @@ function FinalCTA() {
             Démarrer
           </span>
           <h2
-            className="font-sans font-light text-system-green leading-tight"
+            className="font-sans font-normal md:font-light text-system-green leading-tight"
             style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
           >
             Un projet.
