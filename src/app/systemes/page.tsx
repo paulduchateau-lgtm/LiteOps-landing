@@ -625,8 +625,8 @@ export default function SystemesPage() {
 
               <div className="relative h-40 overflow-hidden border border-chrome-light/60">
                 <Image
-                  src="/photos/photo-1684260756882-fe19a4ec0e73.avif"
-                  alt="Aviateur vintage — pionniers et systèmes"
+                  src="/photos/agent-pilot.avif"
+                  alt="Infrastructure Namibia — plateforme centrale Lite Ops"
                   fill
                   className="object-cover object-center"
                 />

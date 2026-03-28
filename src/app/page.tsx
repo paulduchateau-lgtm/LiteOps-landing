@@ -195,8 +195,8 @@ function HeroSection() {
           className="absolute inset-0 scale-110"
         >
           <Image
-            src="/photos/photo-1625252612398-025a798f7690.avif"
-            alt="Dunes dorées — exploration et horizon"
+            src="/photos/photo-1566502877985-e4f1bcaf0ecc.avif"
+            alt="Engineering workshop — morning light"
             fill
             className="object-cover object-center"
             priority
@@ -210,8 +210,8 @@ function HeroSection() {
       {/* Mobile photo strip */}
       <div className="lg:hidden absolute inset-0 -z-10">
         <Image
-          src="/photos/photo-1625252612398-025a798f7690.avif"
-          alt="Dunes dorées — exploration et horizon"
+          src="/photos/photo-1566502877985-e4f1bcaf0ecc.avif"
+          alt="Engineering workshop"
           fill
           className="object-cover object-center opacity-15"
           priority
@@ -246,8 +246,8 @@ function OriginsSection() {
           className="relative aspect-[4/5] overflow-hidden"
         >
           <Image
-            src="/photos/photo-1622700147878-3c1a53738967.avif"
-            alt="Science et artisanat — sagesse technique"
+            src="/photos/photo-1616272963049-da2d8efc0c57.avif"
+            alt="Engineers at work"
             fill
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
@@ -708,7 +708,6 @@ type AgentCard = {
   name: string;
   description: string;
   photo: string;
-  photoAlt: string;
   href: string;
   subCards: SubCard[];
 };
@@ -719,8 +718,7 @@ const AGENT_CARDS: AgentCard[] = [
     name: "PILOT",
     description:
       "Uploader une base. Analyser. Générer des rapports via chatbot.",
-    photo: "/photos/photo-1614726365826-65d0f4448bef.avif",
-    photoAlt: "Astronaute — exploration et précision",
+    photo: "/photos/agent-pilot.avif",
     href: "/agents/pilot",
     subCards: [
       { code: "AG001-RI", label: "Risques" },
@@ -732,8 +730,7 @@ const AGENT_CARDS: AgentCard[] = [
     name: "SAILOR",
     description:
       "Intégrer une base documentaire. Trouver via chatbot. Sources citées.",
-    photo: "/photos/photo-1680634658799-0c88fc470b5d.avif",
-    photoAlt: "Voyage en train — mouvement et destination",
+    photo: "/photos/agent-sailor.avif",
     href: "/agents/sailor",
     subCards: [],
   },
@@ -741,8 +738,7 @@ const AGENT_CARDS: AgentCard[] = [
     code: "AG003",
     name: "MATCHMAKER",
     description: "Définir un besoin. Trouver la ressource idéale. Score radar expliqué.",
-    photo: "/photos/photo-1684063007804-7933d167733e.avif",
-    photoAlt: "Boîtes aux lettres — correspondance et matching",
+    photo: "/photos/agent-matchmaker.avif",
     href: "/agents/matchmaker",
     subCards: [{ code: "MA-01", label: "Ressources RH" }, { code: "MA-02", label: "Conseil" }],
   },
@@ -763,7 +759,7 @@ function AgentPreviewCard({ agent }: { agent: AgentCard }) {
       <div className="relative aspect-[4/5] overflow-hidden">
         <Image
           src={agent.photo}
-          alt={agent.photoAlt}
+          alt={`${agent.name} agent visual`}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, 33vw"
@@ -895,8 +891,8 @@ function QuoteSection() {
         aria-hidden="true"
       >
         <Image
-          src="/photos/photo-1750008415039-65c10dcbb4a5.avif"
-          alt="Montgolfières — perspective et vision"
+          src="/photos/premium_photo-1670897797006-81cbbb1bfc7b.avif"
+          alt=""
           fill
           className="object-cover"
           sizes="100vw"
@@ -1067,8 +1063,8 @@ function LayersSection() {
           <div className="relative">
             <div className="relative aspect-[3/4] overflow-hidden">
               <Image
-                src="/photos/photo-1713281318579-e270850bda88.avif"
-                alt="Plans d'architecte — layers d'ingénierie"
+                src="/photos/photo-1616785640127-6250fb9f7cb4.avif"
+                alt="Workshop detail — layers of craft"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 40vw"
@@ -1217,7 +1213,6 @@ type NewsItem = {
   title: string;
   excerpt: string;
   photo: string;
-  photoAlt: string;
 };
 
 const NEWS_ITEMS: NewsItem[] = [
@@ -1226,24 +1221,21 @@ const NEWS_ITEMS: NewsItem[] = [
     title: "IA locale et souveraineté des données",
     excerpt:
       "Pourquoi exécuter ses modèles en France n'est plus une contrainte mais un avantage compétitif.",
-    photo: "/photos/photo-1684063007804-7933d167733e.avif",
-    photoAlt: "Boîtes aux lettres — correspondance et matching",
+    photo: "/photos/agent-matchmaker.avif",
   },
   {
     tag: "Production",
     title: "Standards de securite en production",
     excerpt:
       "Les pratiques qui séparent un proof-of-concept d'un système en production: audit, rollback, observabilité.",
-    photo: "/photos/photo-1700241956155-6e3cae8a425d.avif",
-    photoAlt: "Atelier collaboratif — travail d'équipe",
+    photo: "/photos/photo-1761495623285-22c46934ed13.avif",
   },
   {
     tag: "Architecture",
     title: "Percées en modularité",
     excerpt:
       "Comment la modularité change la manière de déployer, tester et maintenir des systèmes IA sur le long terme.",
-    photo: "/photos/photo-1713281318582-53ec4ccb8aea.avif",
-    photoAlt: "Bureau d'ingénieur — craft et précision",
+    photo: "/photos/premium_photo-1675705721263-0bbeec261c49.avif",
   },
 ];
 
@@ -1254,7 +1246,7 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
         <div className="relative aspect-[16/10] overflow-hidden mb-4">
           <Image
             src={item.photo}
-            alt={item.photoAlt}
+            alt={item.title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 33vw"

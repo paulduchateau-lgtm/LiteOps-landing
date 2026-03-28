@@ -898,13 +898,13 @@ export default function SailorPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               {
-                src: "/photos/photo-1700241956176-82ec52cb2872.avif",
-                alt: "Salle de réunion — stratégie et collaboration",
+                src: "/photos/photo-1482881497185-d4a9ddbe4151.avif",
+                alt: "Interface Sailor — aperçu",
                 caption: "Interface en cours de finalisation",
               },
               {
-                src: "/photos/photo-1712686422079-c1355b7b922f.avif",
-                alt: "Esquisse architecturale — conception",
+                src: "/photos/photo-1505521377774-103a8cc2f735.avif",
+                alt: "Chat interface Sailor",
                 caption: "Interface en cours de finalisation",
               },
             ].map((shot, i) => (

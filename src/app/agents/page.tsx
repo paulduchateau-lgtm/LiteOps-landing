@@ -18,7 +18,6 @@ type AgentCard = {
   tagline: string;
   description: string;
   photo: string;
-  photoAlt: string;
   href: string;
   operators: string[];
   variants: { code: string; label: string }[];
@@ -32,8 +31,7 @@ const AGENTS: AgentCard[] = [
     tagline: "Data Analytics par chatbot",
     description:
       "Requêtez votre base de données en langage naturel. Analysez, explorez, générez des rapports — sans écrire une ligne de SQL.",
-    photo: "/photos/photo-1614726365826-65d0f4448bef.avif",
-    photoAlt: "Astronaute — exploration et précision",
+    photo: "/photos/agent-pilot.avif",
     href: "/agents/pilot",
     operators: ["DATA LAYER", "TEXT TO SQL", "LLM", "GRAPH GEN"],
     variants: [
@@ -48,8 +46,7 @@ const AGENTS: AgentCard[] = [
     tagline: "Base documentaire intelligente",
     description:
       "Transformez votre base documentaire en chatbot à sources citées. Chaque réponse est ancrée dans le corpus. Zéro hallucination.",
-    photo: "/photos/photo-1680634658799-0c88fc470b5d.avif",
-    photoAlt: "Voyage en train — mouvement et destination",
+    photo: "/photos/agent-sailor.avif",
     href: "/agents/sailor",
     operators: ["DATA LAYER", "OCR", "DOC UNDERSTANDING", "RAG", "LLM"],
     variants: [
@@ -64,8 +61,7 @@ const AGENTS: AgentCard[] = [
     tagline: "Matching ressources–besoins",
     description:
       "Faites correspondre vos ressources aux besoins. Humaines, matérielles, services ou produits — avec scoring structuré et diagramme radar.",
-    photo: "/photos/photo-1684063007804-7933d167733e.avif",
-    photoAlt: "Boîtes aux lettres — correspondance et matching",
+    photo: "/photos/agent-matchmaker.avif",
     href: "/agents/matchmaker",
     operators: ["DATA LAYER", "EMBEDDING", "NLP PARSER", "MATCH ENGINE", "SCORER", "CONV AGENT"],
     variants: [
@@ -121,7 +117,7 @@ function AgentCardComponent({ agent, index }: { agent: AgentCard; index: number 
         <div className="relative aspect-[3/4] overflow-hidden">
           <Image
             src={agent.photo}
-            alt={agent.photoAlt}
+            alt={`${agent.name} agent visual`}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, 33vw"
