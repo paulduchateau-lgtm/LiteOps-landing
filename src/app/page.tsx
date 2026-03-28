@@ -359,17 +359,21 @@ type DiagramNode = {
 
 const OPERATEURS: DiagramNode[] = [
   { id: "data", label: "DATA" },
-  { id: "llm", label: "LLM" },
-  { id: "rag", label: "RAG" },
+  { id: "embed", label: "EMBEDDING" },
+  { id: "chunk", label: "CHUNKER" },
   { id: "ocr", label: "OCR" },
-  { id: "doc", label: "DOC", sublabel: "UNDERSTANDING" },
+  { id: "rag", label: "RAG" },
+  { id: "llm", label: "LLM" },
   { id: "sql", label: "TEXT", sublabel: "TO SQL" },
-  { id: "graph", label: "GRAPH", sublabel: "GENERATION" },
+  { id: "graph", label: "GRAPH GEN" },
+  { id: "match", label: "MATCH", sublabel: "ENGINE" },
+  { id: "conv", label: "CONV", sublabel: "AGENT" },
 ];
 
 const AGENTS: DiagramNode[] = [
   { id: "ag001", label: "AG001", sublabel: "PILOT" },
   { id: "ag002", label: "AG002", sublabel: "SAILOR" },
+  { id: "ag003", label: "AG003", sublabel: "MATCHMAKER" },
 ];
 
 const SYSTEMS: DiagramNode[] = [
@@ -678,9 +682,8 @@ function HierarchyDiagram() {
       {/* Hidden accessible summary */}
       <div className="sr-only">
         <p>
-          Hiérarchie technique: les Opérateurs (DATA, LLM, RAG, OCR, DOC
-          UNDERSTANDING, TEXT TO SQL, GRAPH GENERATION) alimentent les Agents
-          (AG001 PILOT, AG002 SAILOR) qui composent les Systèmes (NAMIBIA HUB,
+          Hiérarchie technique: les Opérateurs (DATA, EMBEDDING, CHUNKER, OCR, RAG, LLM, TEXT TO SQL, GRAPH GEN, MATCH ENGINE, CONV AGENT) alimentent les Agents
+          (AG001 PILOT, AG002 SAILOR, AG003 MATCHMAKER) qui composent les Systèmes (NAMIBIA HUB,
           incluant Recrutement et Acquisition).
         </p>
       </div>
@@ -731,6 +734,14 @@ const AGENT_CARDS: AgentCard[] = [
     href: "/agents/sailor",
     subCards: [],
   },
+  {
+    code: "AG003",
+    name: "MATCHMAKER",
+    description: "Définir un besoin. Trouver la ressource idéale. Score radar expliqué.",
+    photo: "/photos/photo-1739086759198-b99a6e3f8599.avif",
+    href: "/agents/matchmaker",
+    subCards: [{ code: "MA-01", label: "Ressources RH" }, { code: "MA-02", label: "Conseil" }],
+  },
 ];
 
 function AgentPreviewCard({ agent }: { agent: AgentCard }) {
@@ -751,7 +762,7 @@ function AgentPreviewCard({ agent }: { agent: AgentCard }) {
           alt={`${agent.name} agent visual`}
           fill
           className="object-cover transition-transform duration-700 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          sizes="(max-width: 768px) 100vw, 33vw"
         />
 
         {/* Dark gradient overlay */}
@@ -833,19 +844,17 @@ function AgentsPreviewSection() {
       <div className="max-w-7xl mx-auto px-8 lg:px-20">
         <Reveal className="mb-16 flex flex-col gap-3">
           <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">
-            Agents actifs
+            Nos agents
           </span>
           <h2
             className="font-sans font-light text-system-green leading-tight"
             style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
           >
-            Deux agents.
-            <br />
-            Un but.
+            Trois agents. Un but.
           </h2>
         </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
           {AGENT_CARDS.map((agent, i) => (
             <Reveal key={agent.code} delay={i * 0.12}>
               <AgentPreviewCard agent={agent} />

@@ -1,21 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
-type OperatorId = "DATA_LAYER" | "TEXT_TO_SQL" | "LLM" | "GRAPH_GENERATOR";
-type LayerId = "TECHNIQUE" | "METIER" | "ADAPTATION";
+type OperatorId = "DATA_LAYER" | "TEXT_TO_SQL" | "LLM" | "GRAPH_GEN";
+type LayerTabId = "TECHNIQUE" | "METIER" | "ADAPTATION";
 
-interface Operator {
+interface PipelineOperator {
   id: OperatorId;
-  label: string;
   code: string;
+  label: string;
   description: string;
   role: string;
   inputs: string[];
@@ -23,743 +23,443 @@ interface Operator {
   preview: string;
   x: number;
   y: number;
-  width: number;
-  height: number;
+  w: number;
+  h: number;
 }
 
-interface LayerAnnotation {
-  id: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  text: string;
-  color: string;
-  fillOpacity: number;
-}
-
-interface Layer {
-  id: LayerId;
+interface LayerTab {
+  id: LayerTabId;
   label: string;
   description: string;
-  color: string;
-  annotations: LayerAnnotation[];
+  annotations: string[];
+}
+
+interface Specialist {
+  code: string;
+  name: string;
+  tagline: string;
+  description: string;
+  uses: string[];
+}
+
+interface PricingTier {
+  code: string;
+  name: string;
+  price: string;
+  unit: string;
+  description: string;
+  features: string[];
+  highlight: boolean;
 }
 
 // ---------------------------------------------------------------------------
 // Data
 // ---------------------------------------------------------------------------
 
-const OPERATORS: Operator[] = [
+const OPERATORS: PipelineOperator[] = [
   {
     id: "DATA_LAYER",
-    label: "DATA LAYER",
     code: "OP-01",
+    label: "DATA LAYER",
     description: "Ingestion & normalisation",
-    role: "Connecteur universel de données — ingère, normalise et indexe toute source structurée.",
-    inputs: ["Base de données SQL", "Fichiers CSV/Excel", "Contexte métier NL"],
-    outputs: ["Schéma normalisé", "Métadonnées indexées", "Graphe de relations"],
-    preview: "Analyse du schéma: 12 tables, 847 colonnes, 3 relations détectées.",
-    x: 200,
-    y: 140,
-    width: 130,
-    height: 64,
+    role: "Connecteur universel — ingère, normalise et indexe toute source structurée (SQL, CSV, Excel). Détecte les schémas, les relations, les clés primaires.",
+    inputs: [
+      "Base SQL (PostgreSQL, MySQL, SQLite)",
+      "Fichiers CSV / Excel",
+      "Contexte métier en langage naturel",
+    ],
+    outputs: [
+      "Schéma normalisé + métadonnées",
+      "Graphe de relations détecté",
+      "Index des colonnes sémantiques",
+    ],
+    preview: "Analyse du schéma: 12 tables, 847 colonnes, 3 clés étrangères détectées.",
+    x: 200, y: 130, w: 140, h: 68,
   },
   {
     id: "TEXT_TO_SQL",
-    label: "TEXT TO SQL",
     code: "OP-02",
-    description: "Traduction langage naturel",
-    role: "Traduit les questions en langage naturel en requêtes SQL optimisées pour votre schéma.",
-    inputs: ["Question NL", "Schéma normalisé", "Métadonnées contextuelles"],
-    outputs: ["Requete SQL", "Plan d'execution", "Score de confiance"],
-    preview: 'SELECT dept, AVG(salary) FROM employees WHERE... [CONFIANCE: 94%]',
-    x: 370,
-    y: 140,
-    width: 130,
-    height: 64,
+    label: "TEXT TO SQL",
+    description: "Traduction langage naturel → SQL",
+    role: "Traduit les questions en langage naturel en requêtes SQL précises, en tenant compte du schéma et du contexte métier.",
+    inputs: [
+      "Question en langage naturel",
+      "Schéma normalisé",
+      "Métadonnées contextuelles",
+    ],
+    outputs: [
+      "Requête SQL optimisée",
+      "Plan d'exécution",
+      "Score de confiance (0–100)",
+    ],
+    preview: "SELECT dept, AVG(salary) FROM employees WHERE... — CONFIANCE: 94%",
+    x: 370, y: 130, w: 140, h: 68,
   },
   {
     id: "LLM",
-    label: "LLM",
     code: "OP-03",
+    label: "LLM",
     description: "Modèle de langage",
-    role: "Modèle de langage — génère les analyses, interprétations et recommandations à partir des résultats de requêtes.",
-    inputs: ["Résultats SQL", "Contexte métier", "Historique conversation"],
-    outputs: ["Analyse textuelle", "Insights clés", "Recommandations"],
-    preview: "Analyse: Les ventes Q3 montrent une hausse de 18% sur le segment PME, portée par...",
-    x: 540,
-    y: 140,
-    width: 130,
-    height: 64,
+    role: "Génère les analyses, interprétations et recommandations à partir des résultats de requêtes SQL.",
+    inputs: [
+      "Résultats SQL bruts",
+      "Contexte métier",
+      "Historique de conversation",
+    ],
+    outputs: [
+      "Analyse textuelle structurée",
+      "Insights clés hiérarchisés",
+      "Recommandations actionnables",
+    ],
+    preview: "Analyse: Les ventes Q3 montrent une hausse de 18 % sur le segment PME…",
+    x: 540, y: 130, w: 140, h: 68,
   },
   {
-    id: "GRAPH_GENERATOR",
-    label: "GRAPH GEN",
+    id: "GRAPH_GEN",
     code: "OP-04",
+    label: "GRAPH GEN",
     description: "Visualisation automatique",
-    role: "Transforme les données en visualisations claires — sélectionne automatiquement le type de graphe optimal.",
-    inputs: ["Dataset structuré", "Type d'analyse", "Préférences utilisateur"],
-    outputs: ["Graphiques SVG/PNG", "Tableaux interactifs", "Exports PDF"],
-    preview: "[BAR CHART] Ventes par région — 6 séries, 12 périodes, annotations automatiques",
-    x: 710,
-    y: 140,
-    width: 130,
-    height: 64,
+    role: "Transforme les données en visualisations adaptées — sélectionne automatiquement le type de graphe optimal selon la nature des données.",
+    inputs: [
+      "Dataset structuré",
+      "Type d'analyse détecté",
+      "Préférences utilisateur",
+    ],
+    outputs: [
+      "Graphiques SVG/PNG",
+      "Tableaux interactifs",
+      "Exports PDF",
+    ],
+    preview: "[BAR CHART] Ventes par région — 6 séries, 12 périodes, annotations auto",
+    x: 710, y: 130, w: 140, h: 68,
   },
 ];
 
-const LAYERS: Layer[] = [
+const LAYER_TABS: LayerTab[] = [
   {
     id: "TECHNIQUE",
-    label: "TECHNIQUE",
-    description: "Assemblage technique — modèles, connecteurs, infra",
-    color: "#2F3427",
+    label: "Technique",
+    description: "Pipeline SQL-aware complet — connecteurs natifs PostgreSQL/MySQL/SQLite, fine-tuning schema-aware pour le modèle Text-To-SQL (Mistral 3B local ou GPT-4o cloud), génération de graphes avec Recharts + D3.js. Chaque réponse est ancrée sur votre schéma réel.",
     annotations: [
-      {
-        id: "t1",
-        x: 188,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Connecteurs: PostgreSQL, MySQL, SQLite, CSV, Excel",
-        color: "#2F3427",
-        fillOpacity: 0.07,
-      },
-      {
-        id: "t2",
-        x: 358,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Modèle: schema-aware fine-tuning",
-        color: "#2F3427",
-        fillOpacity: 0.07,
-      },
-      {
-        id: "t3",
-        x: 528,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Local: Mistral 3B / Cloud: GPT-4o",
-        color: "#2F3427",
-        fillOpacity: 0.07,
-      },
-      {
-        id: "t4",
-        x: 698,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Recharts, D3.js, export SVG/PDF",
-        color: "#2F3427",
-        fillOpacity: 0.07,
-      },
+      "Connecteurs: PostgreSQL, MySQL, SQLite, CSV, Excel",
+      "Modèle schema-aware fine-tuned",
+      "Local: Mistral 3B / Cloud: GPT-4o",
+      "Recharts + D3.js, export SVG/PDF",
     ],
   },
   {
     id: "METIER",
-    label: "METIER",
-    description: "Spécialisation métier — entraînement domaine spécifique",
-    color: "#5A6B4A",
+    label: "Métier",
+    description: "Calibré pour les directions RH, Finance et Supply Chain. Comprend le vocabulaire sectoriel, les KPI métier usuels, les hiérarchies organisationnelles. Vos équipes posent des questions en français et obtiennent des analyses immédiatement actionnables.",
     annotations: [
-      {
-        id: "m1",
-        x: 188,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Ontologie risques: 40K points de données",
-        color: "#5A6B4A",
-        fillOpacity: 0.1,
-      },
-      {
-        id: "m2",
-        x: 358,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Vocabulaire RH, finance, supply chain",
-        color: "#5A6B4A",
-        fillOpacity: 0.1,
-      },
-      {
-        id: "m3",
-        x: 528,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Entraine pour cartographier les risques critiques",
-        color: "#5A6B4A",
-        fillOpacity: 0.1,
-      },
-      {
-        id: "m4",
-        x: 698,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Templates KPI sectoriels integres",
-        color: "#5A6B4A",
-        fillOpacity: 0.1,
-      },
+      "Ontologie risques: 40K points de données",
+      "Vocabulaire RH, finance, supply chain",
+      "Cartographie automatique des risques critiques",
+      "Templates KPI sectoriels intégrés",
     ],
   },
   {
     id: "ADAPTATION",
-    label: "ADAPTATION",
-    description: "Personnalisation organisation — contexte, glossaire, workflows",
-    color: "#A5D900",
+    label: "Adaptation",
+    description: "Déploiement en 5 jours. Connexion à vos schémas existants, ingestion du glossaire métier de votre organisation, calibration de la tonalité des rapports, personnalisation des exports.",
     annotations: [
-      {
-        id: "a1",
-        x: 188,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Connexion à vos schémas existants",
-        color: "#6B8F00",
-        fillOpacity: 0.12,
-      },
-      {
-        id: "a2",
-        x: 358,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Glossaire métier de votre organisation",
-        color: "#6B8F00",
-        fillOpacity: 0.12,
-      },
-      {
-        id: "a3",
-        x: 528,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Tonalité, format de rapport, langue",
-        color: "#6B8F00",
-        fillOpacity: 0.12,
-      },
-      {
-        id: "a4",
-        x: 698,
-        y: 128,
-        width: 154,
-        height: 88,
-        text: "Charte graphique, couleurs, exports",
-        color: "#6B8F00",
-        fillOpacity: 0.12,
-      },
+      "Connexion à vos schémas existants",
+      "Glossaire métier de votre organisation",
+      "Tonalité et format de rapport custom",
+      "Charte graphique et exports personnalisés",
     ],
   },
 ];
 
+const SPECIALISTS: Specialist[] = [
+  {
+    code: "PA-01",
+    name: "Pilot Analytics — Risques & RH",
+    tagline: "Analyse RH structurée sans SQL",
+    description: "Analyse de base RH structurée — effectifs, mouvements, absentéisme, masse salariale. Le DRH explore sa data sans SQL.",
+    uses: [
+      "Suivi des effectifs et mouvements sortants",
+      "Analyse d'absentéisme par site et catégorie",
+      "Exploration masse salariale en langage naturel",
+      "Génération de rapports CE automatique",
+    ],
+  },
+  {
+    code: "PA-02",
+    name: "Pilot Analytics — Data Employés",
+    tagline: "Exploration RGPD-conforme des données RH",
+    description: "Exploration des données individuelles de collaborateurs dans le respect RGPD. Anonymisation automatique, exports conformes.",
+    uses: [
+      "Profils compétences et historique de carrière",
+      "Analyse des formations et certifications",
+      "Suivi des entretiens annuels",
+      "Exports anonymisés pour audits",
+    ],
+  },
+];
+
+const PRICING_TIERS: PricingTier[] = [
+  {
+    code: "PI-STARTER",
+    name: "Starter",
+    price: "490€",
+    unit: "/mois",
+    description: "1 base de données. 5 utilisateurs. Hébergement ZDR Scaleway.",
+    features: [
+      "1 source de données connectée",
+      "Jusqu'à 5 utilisateurs",
+      "50 requêtes / jour",
+      "Exports PDF & Excel",
+      "Support email",
+    ],
+    highlight: false,
+  },
+  {
+    code: "PI-PRO",
+    name: "Pro",
+    price: "1 190€",
+    unit: "/mois",
+    description: "Bases illimitées. Équipe complète. API + Webhooks.",
+    features: [
+      "Sources de données illimitées",
+      "Utilisateurs illimités",
+      "Requêtes illimitées",
+      "API REST + Webhooks",
+      "Rapports planifiés",
+      "Support prioritaire",
+    ],
+    highlight: true,
+  },
+  {
+    code: "PI-DEPLOY",
+    name: "Local Deploy",
+    price: "Sur devis",
+    unit: "",
+    description: "Infrastructure on-premise. Modèles locaux. Données jamais hors site.",
+    features: [
+      "Modèles Mistral/Qwen on-premise",
+      "Air-gap total possible",
+      "Données jamais hors site",
+      "Audit de sécurité inclus",
+      "SLA personnalisé",
+    ],
+    highlight: false,
+  },
+];
+
+const SCREENSHOTS = [
+  {
+    src: "/screenshots-pilot-hero.png",
+    alt: "Interface principale Pilot",
+    caption: "Interface de requêtage en langage naturel",
+  },
+  {
+    src: "/screenshots-pilot-report1.png",
+    alt: "Rapport effectifs par site",
+    caption: "Rapport effectifs par site",
+  },
+  {
+    src: "/screenshots-pilot-report2.jpg",
+    alt: "Rapport mouvements sortants",
+    caption: "Rapport mouvements sortants",
+  },
+  {
+    src: "/screenshots-pilot-report3.jpg",
+    alt: "Rapport absentéisme",
+    caption: "Rapport absentéisme",
+  },
+];
+
 // ---------------------------------------------------------------------------
-// SVG Diagram
+// SVG Pipeline Diagram
 // ---------------------------------------------------------------------------
 
-function BlueprintGrid() {
+function SvgDefs() {
   return (
     <defs>
-      <pattern
-        id="grid-small"
-        width="20"
-        height="20"
-        patternUnits="userSpaceOnUse"
-      >
-        <path
-          d="M 20 0 L 0 0 0 20"
-          fill="none"
-          stroke="rgba(212,208,200,0.25)"
-          strokeWidth="0.5"
-        />
+      <pattern id="pilot-grid-sm" width="20" height="20" patternUnits="userSpaceOnUse">
+        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(212,208,200,0.2)" strokeWidth="0.5" />
       </pattern>
-      <pattern
-        id="grid-large"
-        width="100"
-        height="100"
-        patternUnits="userSpaceOnUse"
-      >
-        <rect width="100" height="100" fill="url(#grid-small)" />
-        <path
-          d="M 100 0 L 0 0 0 100"
-          fill="none"
-          stroke="rgba(212,208,200,0.5)"
-          strokeWidth="0.5"
-        />
+      <pattern id="pilot-grid-lg" width="100" height="100" patternUnits="userSpaceOnUse">
+        <rect width="100" height="100" fill="url(#pilot-grid-sm)" />
+        <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(212,208,200,0.4)" strokeWidth="0.5" />
       </pattern>
-      <marker
-        id="arrow"
-        markerWidth="6"
-        markerHeight="6"
-        refX="5"
-        refY="3"
-        orient="auto"
-      >
-        <path d="M0,0.5 L0,5.5 L5.5,3 z" fill="#B8B5AE" />
+      <marker id="pilot-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+        <path d="M0,0.5 L0,6.5 L6,3.5 z" fill="#B8B5AE" />
       </marker>
-      <marker
-        id="arrow-active"
-        markerWidth="6"
-        markerHeight="6"
-        refX="5"
-        refY="3"
-        orient="auto"
-      >
-        <path d="M0,0.5 L0,5.5 L5.5,3 z" fill="#A5D900" />
+      <marker id="pilot-arrow-active" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+        <path d="M0,0.5 L0,6.5 L6,3.5 z" fill="#A5D900" />
       </marker>
     </defs>
-  );
-}
-
-function OperatorBlock({
-  op,
-  isSelected,
-  onClick,
-}: {
-  op: Operator;
-  isSelected: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <g
-      onClick={onClick}
-      style={{ cursor: "pointer" }}
-      role="button"
-      aria-label={`Opérateur ${op.label}`}
-    >
-      {/* Shadow / active glow */}
-      {isSelected && (
-        <rect
-          x={op.x - 2}
-          y={op.y - 2}
-          width={op.width + 4}
-          height={op.height + 4}
-          fill="none"
-          stroke="#A5D900"
-          strokeWidth="1.5"
-        />
-      )}
-      {/* Main block */}
-      <rect
-        x={op.x}
-        y={op.y}
-        width={op.width}
-        height={op.height}
-        fill={isSelected ? "#F0F5E6" : "#EFEFEF"}
-        stroke={isSelected ? "#A5D900" : "#9A968E"}
-        strokeWidth="1"
-      />
-      {/* Top label bar */}
-      <rect
-        x={op.x}
-        y={op.y}
-        width={op.width}
-        height={18}
-        fill={isSelected ? "#A5D900" : "#9A968E"}
-      />
-      {/* Code label */}
-      <text
-        x={op.x + 5}
-        y={op.y + 12}
-        fontFamily="'JetBrains Mono', monospace"
-        fontSize="7"
-        fill={isSelected ? "#2F3427" : "#F0EEEB"}
-        fontWeight="500"
-        letterSpacing="0.08em"
-      >
-        {op.code}
-      </text>
-      {/* Operator name */}
-      <text
-        x={op.x + op.width / 2}
-        y={op.y + 34}
-        fontFamily="'JetBrains Mono', monospace"
-        fontSize="8.5"
-        fill={isSelected ? "#2F3427" : "#1A1A1A"}
-        fontWeight="500"
-        letterSpacing="0.05em"
-        textAnchor="middle"
-      >
-        {op.label}
-      </text>
-      {/* Description */}
-      <text
-        x={op.x + op.width / 2}
-        y={op.y + 48}
-        fontFamily="'JetBrains Mono', monospace"
-        fontSize="6.5"
-        fill="#908E85"
-        letterSpacing="0.03em"
-        textAnchor="middle"
-      >
-        {op.description}
-      </text>
-      {/* Corner crosshairs */}
-      <line
-        x1={op.x + 3}
-        y1={op.y + 22}
-        x2={op.x + 7}
-        y2={op.y + 22}
-        stroke="#CDC9C2"
-        strokeWidth="0.5"
-      />
-      <line
-        x1={op.x + 5}
-        y1={op.y + 20}
-        x2={op.x + 5}
-        y2={op.y + 24}
-        stroke="#CDC9C2"
-        strokeWidth="0.5"
-      />
-    </g>
   );
 }
 
 function PipelineDiagram({
   selectedOp,
   onSelectOp,
-  activeLayer,
 }: {
   selectedOp: OperatorId | null;
   onSelectOp: (id: OperatorId | null) => void;
-  activeLayer: LayerId | null;
 }) {
-  const layer = activeLayer ? LAYERS.find((l) => l.id === activeLayer) : null;
-
   const inputItems = ["Base de données", "Tableurs", "Contexte NL"];
   const outputItems = ["Rapports graphiques", "Exploration chatbot", "Recommandations"];
 
+  const connections: [OperatorId, OperatorId][] = [
+    ["DATA_LAYER", "TEXT_TO_SQL"],
+    ["TEXT_TO_SQL", "LLM"],
+    ["LLM", "GRAPH_GEN"],
+  ];
+
   return (
     <svg
-      viewBox="0 0 980 320"
+      viewBox="0 0 960 300"
       className="w-full"
       style={{ fontFamily: "'JetBrains Mono', monospace" }}
-      aria-label="Diagramme pipeline Pilot AG001"
+      aria-label="Diagramme pipeline AG001 PILOT"
       role="img"
     >
-      <BlueprintGrid />
+      <SvgDefs />
+      <rect width="960" height="300" fill="url(#pilot-grid-lg)" />
 
-      {/* Background grid */}
-      <rect width="980" height="320" fill="url(#grid-large)" />
+      {/* Outer border */}
+      <rect x="8" y="8" width="944" height="284" fill="none" stroke="#CDC9C2" strokeWidth="0.75" strokeDasharray="4 2" />
 
-      {/* Outer border with corner marks */}
-      <rect
-        x="8"
-        y="8"
-        width="964"
-        height="304"
-        fill="none"
-        stroke="#CDC9C2"
-        strokeWidth="0.75"
-        strokeDasharray="4 2"
-      />
-      {/* Corner crosses */}
-      {[
-        [8, 8],
-        [972, 8],
-        [8, 312],
-        [972, 312],
-      ].map(([cx, cy], i) => (
+      {/* Corner marks */}
+      {([[8,8],[952,8],[8,292],[952,292]] as [number,number][]).map(([cx, cy], i) => (
         <g key={i}>
-          <line
-            x1={(cx ?? 0) - 4}
-            y1={cy ?? 0}
-            x2={(cx ?? 0) + 4}
-            y2={cy ?? 0}
-            stroke="#CDC9C2"
-            strokeWidth="0.75"
-          />
-          <line
-            x1={cx ?? 0}
-            y1={(cy ?? 0) - 4}
-            x2={cx ?? 0}
-            y2={(cy ?? 0) + 4}
-            stroke="#CDC9C2"
-            strokeWidth="0.75"
-          />
+          <line x1={cx - 5} y1={cy} x2={cx + 5} y2={cy} stroke="#CDC9C2" strokeWidth="0.75" />
+          <line x1={cx} y1={cy - 5} x2={cx} y2={cy + 5} stroke="#CDC9C2" strokeWidth="0.75" />
         </g>
       ))}
 
-      {/* Title block */}
-      <text
-        x="20"
-        y="28"
-        fontFamily="'JetBrains Mono', monospace"
-        fontSize="8"
-        fill="#9A968E"
-        letterSpacing="0.12em"
-      >
-        LITE OPS / AG001-PILOT / PIPELINE SCHEMA / REV.4
+      {/* Header label */}
+      <text x="20" y="26" fontFamily="'JetBrains Mono', monospace" fontSize="7.5" fill="#9A968E" letterSpacing="0.12em">
+        LITE OPS / AG001-PILOT / PIPELINE SCHEMA / REV.5
       </text>
-      <text
-        x="960"
-        y="28"
-        fontFamily="'JetBrains Mono', monospace"
-        fontSize="8"
-        fill="#B8B5AE"
-        letterSpacing="0.08em"
-        textAnchor="end"
-      >
-        2026-03-27
+      <text x="940" y="26" fontFamily="'JetBrains Mono', monospace" fontSize="7.5" fill="#B8B5AE" letterSpacing="0.08em" textAnchor="end">
+        2026-03-28
       </text>
+      <line x1="20" y1="33" x2="940" y2="33" stroke="#CDC9C2" strokeWidth="0.5" />
 
-      {/* Horizontal rule */}
-      <line
-        x1="20"
-        y1="36"
-        x2="960"
-        y2="36"
-        stroke="#CDC9C2"
-        strokeWidth="0.5"
-      />
-
-      {/* ── INPUTS BLOCK ── */}
-      <rect
-        x="20"
-        y="100"
-        width="140"
-        height="140"
-        fill="#EFEFEF"
-        stroke="#9A968E"
-        strokeWidth="0.75"
-      />
-      <rect x="20" y="100" width="140" height="14" fill="#9A968E" />
-      <text
-        x="25"
-        y="111"
-        fontFamily="'JetBrains Mono', monospace"
-        fontSize="7"
-        fill="#F0EEEB"
-        letterSpacing="0.1em"
-        fontWeight="500"
-      >
+      {/* INPUTS block */}
+      <rect x="20" y="90" width="148" height="135" fill="#F0EEEB" stroke="#9A968E" strokeWidth="0.75" />
+      <rect x="20" y="90" width="148" height="15" fill="#9A968E" />
+      <text x="26" y="101" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#F0EEEB" letterSpacing="0.1em" fontWeight="500">
         INPUTS
       </text>
       {inputItems.map((item, i) => (
         <g key={item}>
-          <rect
-            x="28"
-            y={122 + i * 34}
-            width="124"
-            height="26"
-            fill="#F5F2ED"
-            stroke="#D4D0C8"
-            strokeWidth="0.5"
-          />
-          <text
-            x="90"
-            y={139 + i * 34}
-            fontFamily="'JetBrains Mono', monospace"
-            fontSize="7"
-            fill="#1A1A1A"
-            letterSpacing="0.04em"
-            textAnchor="middle"
-          >
+          <rect x="28" y={113 + i * 34} width="132" height="26" fill="#F6F4F0" stroke="#D5D1CB" strokeWidth="0.5" />
+          <text x="94" y={130 + i * 34} fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#1C1C1A" letterSpacing="0.04em" textAnchor="middle">
             {item}
           </text>
         </g>
       ))}
 
-      {/* Input → Data Layer arrow */}
+      {/* Input → DATA LAYER arrow */}
       <line
-        x1="160"
-        y1="172"
-        x2="196"
-        y2="172"
+        x1="168" y1="158"
+        x2="196" y2="164"
         stroke={selectedOp === "DATA_LAYER" ? "#A5D900" : "#B8B5AE"}
-        strokeWidth="0.75"
-        markerEnd={
-          selectedOp === "DATA_LAYER" ? "url(#arrow-active)" : "url(#arrow)"
-        }
+        strokeWidth="0.8"
+        markerEnd={selectedOp === "DATA_LAYER" ? "url(#pilot-arrow-active)" : "url(#pilot-arrow)"}
       />
 
-      {/* Pipeline connections between operators */}
-      {(
-        [
-          ["DATA_LAYER", "TEXT_TO_SQL"],
-          ["TEXT_TO_SQL", "LLM"],
-          ["LLM", "GRAPH_GENERATOR"],
-        ] as [OperatorId, OperatorId][]
-      ).map(([from, to]) => {
-        const fromOp = OPERATORS.find((o) => o.id === from)!;
-        const toOp = OPERATORS.find((o) => o.id === to)!;
-        const isActive = selectedOp === from || selectedOp === to;
+      {/* Connections between operators */}
+      {connections.map(([from, to]) => {
+        const fromOp = OPERATORS.find(o => o.id === from)!;
+        const toOp = OPERATORS.find(o => o.id === to)!;
+        const active = selectedOp === from || selectedOp === to;
         return (
           <line
             key={`${from}-${to}`}
-            x1={fromOp.x + fromOp.width}
-            y1={fromOp.y + fromOp.height / 2}
+            x1={fromOp.x + fromOp.w}
+            y1={fromOp.y + fromOp.h / 2}
             x2={toOp.x}
-            y2={toOp.y + toOp.height / 2}
-            stroke={isActive ? "#A5D900" : "#B8B5AE"}
-            strokeWidth="0.75"
-            markerEnd={isActive ? "url(#arrow-active)" : "url(#arrow)"}
+            y2={toOp.y + toOp.h / 2}
+            stroke={active ? "#A5D900" : "#B8B5AE"}
+            strokeWidth="0.8"
+            markerEnd={active ? "url(#pilot-arrow-active)" : "url(#pilot-arrow)"}
           />
         );
       })}
 
-      {/* Graph Generator → Outputs arrow */}
+      {/* GRAPH_GEN → OUTPUTS arrow */}
       {(() => {
         const last = OPERATORS[OPERATORS.length - 1]!;
+        const active = selectedOp === "GRAPH_GEN";
         return (
           <line
-            x1={last.x + last.width}
-            y1={last.y + last.height / 2}
-            x2="820"
-            y2="172"
-            stroke={selectedOp === "GRAPH_GENERATOR" ? "#A5D900" : "#B8B5AE"}
-            strokeWidth="0.75"
-            markerEnd={
-              selectedOp === "GRAPH_GENERATOR"
-                ? "url(#arrow-active)"
-                : "url(#arrow)"
-            }
+            x1={last.x + last.w}
+            y1={last.y + last.h / 2}
+            x2="810"
+            y2="164"
+            stroke={active ? "#A5D900" : "#B8B5AE"}
+            strokeWidth="0.8"
+            markerEnd={active ? "url(#pilot-arrow-active)" : "url(#pilot-arrow)"}
           />
         );
       })()}
 
-      {/* ── OPERATOR BLOCKS ── */}
-      {OPERATORS.map((op) => (
-        <OperatorBlock
-          key={op.id}
-          op={op}
-          isSelected={selectedOp === op.id}
-          onClick={() => onSelectOp(selectedOp === op.id ? null : op.id)}
-        />
-      ))}
+      {/* Operator blocks */}
+      {OPERATORS.map((op) => {
+        const sel = selectedOp === op.id;
+        return (
+          <g
+            key={op.id}
+            onClick={() => onSelectOp(sel ? null : op.id)}
+            style={{ cursor: "pointer" }}
+            role="button"
+            aria-label={`Opérateur ${op.label}`}
+            aria-pressed={sel}
+          >
+            {sel && (
+              <rect x={op.x - 2} y={op.y - 2} width={op.w + 4} height={op.h + 4} fill="none" stroke="#A5D900" strokeWidth="1.5" />
+            )}
+            <rect
+              x={op.x} y={op.y} width={op.w} height={op.h}
+              fill={sel ? "#EFF5E6" : "#EFEFEF"}
+              stroke={sel ? "#A5D900" : "#9A968E"}
+              strokeWidth="1"
+            />
+            <rect
+              x={op.x} y={op.y} width={op.w} height={18}
+              fill={sel ? "#A5D900" : "#9A968E"}
+            />
+            <text x={op.x + 5} y={op.y + 12} fontFamily="'JetBrains Mono', monospace" fontSize="7" fill={sel ? "#2C2F26" : "#F0EEEB"} fontWeight="500" letterSpacing="0.08em">
+              {op.code}
+            </text>
+            <text x={op.x + op.w / 2} y={op.y + 33} fontFamily="'JetBrains Mono', monospace" fontSize="8" fill={sel ? "#2C2F26" : "#1C1C1A"} fontWeight="500" letterSpacing="0.05em" textAnchor="middle">
+              {op.label}
+            </text>
+            <text x={op.x + op.w / 2} y={op.y + 48} fontFamily="'JetBrains Mono', monospace" fontSize="6.5" fill="#908E85" letterSpacing="0.03em" textAnchor="middle">
+              {op.description}
+            </text>
+            <text x={op.x + op.w / 2} y={op.y + op.h + 14} fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="#B8B5AE" letterSpacing="0.06em" textAnchor="middle">
+              {op.code}
+            </text>
+          </g>
+        );
+      })}
 
-      {/* ── OUTPUTS BLOCK ── */}
-      <rect
-        x="820"
-        y="100"
-        width="140"
-        height="140"
-        fill="#EFEFEF"
-        stroke="#9A968E"
-        strokeWidth="0.75"
-      />
-      <rect x="820" y="100" width="140" height="14" fill="#9A968E" />
-      <text
-        x="825"
-        y="111"
-        fontFamily="'JetBrains Mono', monospace"
-        fontSize="7"
-        fill="#F0EEEB"
-        letterSpacing="0.1em"
-        fontWeight="500"
-      >
+      {/* OUTPUTS block */}
+      <rect x="810" y="90" width="130" height="135" fill="#F0EEEB" stroke="#9A968E" strokeWidth="0.75" />
+      <rect x="810" y="90" width="130" height="15" fill="#9A968E" />
+      <text x="816" y="101" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#F0EEEB" letterSpacing="0.1em" fontWeight="500">
         OUTPUTS
       </text>
       {outputItems.map((item, i) => (
         <g key={item}>
-          <rect
-            x="828"
-            y={122 + i * 34}
-            width="124"
-            height="26"
-            fill="#F5F2ED"
-            stroke="#D4D0C8"
-            strokeWidth="0.5"
-          />
-          <text
-            x="890"
-            y={139 + i * 34}
-            fontFamily="'JetBrains Mono', monospace"
-            fontSize="7"
-            fill="#1A1A1A"
-            letterSpacing="0.04em"
-            textAnchor="middle"
-          >
+          <rect x="818" y={113 + i * 34} width="114" height="26" fill="#F6F4F0" stroke="#D5D1CB" strokeWidth="0.5" />
+          <text x="875" y={130 + i * 34} fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#1C1C1A" letterSpacing="0.04em" textAnchor="middle">
             {item}
           </text>
         </g>
       ))}
 
-      {/* Pipeline spine labels */}
-      {OPERATORS.map((op) => (
-        <text
-          key={`label-${op.id}`}
-          x={op.x + op.width / 2}
-          y={op.y + op.height + 16}
-          fontFamily="'JetBrains Mono', monospace"
-          fontSize="6"
-          fill="#B8B5AE"
-          letterSpacing="0.06em"
-          textAnchor="middle"
-        >
-          {op.code}
-        </text>
-      ))}
-
-      {/* ── LAYER OVERLAYS ── */}
-      {layer &&
-        layer.annotations.map((ann) => (
-          <g key={ann.id}>
-            <rect
-              x={ann.x}
-              y={ann.y}
-              width={ann.width}
-              height={ann.height}
-              fill={ann.color}
-              fillOpacity={ann.fillOpacity}
-              stroke={ann.color}
-              strokeWidth="0.75"
-              strokeDasharray="3 2"
-            />
-            <foreignObject
-              x={ann.x + 4}
-              y={ann.y + ann.height + 2}
-              width={ann.width - 8}
-              height="32"
-            >
-              <div
-                style={{
-                  fontFamily: "'JetBrains Mono', monospace",
-                  fontSize: "6px",
-                  color: ann.color,
-                  lineHeight: "1.4",
-                  letterSpacing: "0.03em",
-                }}
-              >
-                {ann.text}
-              </div>
-            </foreignObject>
-          </g>
-        ))}
-
-      {/* Layer badge */}
-      {layer && (
-        <g>
-          <rect x="20" y="260" width="140" height="20" fill={layer.color} fillOpacity="0.12" stroke={layer.color} strokeWidth="0.75" />
-          <text
-            x="90"
-            y="273"
-            fontFamily="'JetBrains Mono', monospace"
-            fontSize="7"
-            fill={layer.color}
-            letterSpacing="0.1em"
-            textAnchor="middle"
-            fontWeight="600"
-          >
-            CALQUE: {layer.label}
-          </text>
-        </g>
-      )}
-
-      {/* Bottom legend */}
-      <text
-        x="960"
-        y="300"
-        fontFamily="'JetBrains Mono', monospace"
-        fontSize="6.5"
-        fill="#B8B5AE"
-        letterSpacing="0.06em"
-        textAnchor="end"
-      >
-        Cliquez sur un opérateur pour les détails
+      {/* Click hint */}
+      <text x="940" y="290" fontFamily="'JetBrains Mono', monospace" fontSize="6.5" fill="#B8B5AE" letterSpacing="0.06em" textAnchor="end">
+        Cliquer sur un opérateur pour les détails
       </text>
     </svg>
   );
@@ -773,94 +473,67 @@ function OperatorPanel({
   op,
   onClose,
 }: {
-  op: Operator;
+  op: PipelineOperator;
   onClose: () => void;
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, x: 40 }}
+      initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 40 }}
-      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+      exit={{ opacity: 0, x: 20 }}
+      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
       className="border border-rule bg-warm-paper"
       role="complementary"
       aria-label={`Détails opérateur ${op.label}`}
     >
-      {/* Panel header */}
       <div className="flex items-center justify-between border-b border-rule bg-system-green px-5 py-3">
         <div>
-          <span className="font-mono text-[9px] tracking-[0.14em] text-chrome">
-            {op.code}
-          </span>
-          <h3 className="font-mono text-sm font-medium tracking-widest text-architect-paper">
-            {op.label}
-          </h3>
+          <span className="font-mono text-[9px] tracking-[0.14em] text-chrome block">{op.code}</span>
+          <h3 className="font-mono text-sm font-medium tracking-widest text-architect-paper">{op.label}</h3>
         </div>
         <button
           onClick={onClose}
           className="font-mono text-xs text-chrome-dark transition-colors hover:text-architect-paper"
-          aria-label="Fermer"
+          aria-label="Fermer le panneau"
         >
           [X]
         </button>
       </div>
 
-      <div className="p-6 lg:p-8 space-y-5">
-        {/* Role */}
+      <div className="p-6 space-y-5">
         <div>
-          <p className="mb-1.5 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">
-            Role
-          </p>
-          <p className="font-sans text-sm leading-relaxed text-ink/65">
-            {op.role}
-          </p>
+          <p className="mb-1.5 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">Rôle</p>
+          <p className="font-sans text-sm leading-relaxed text-ink/65">{op.role}</p>
         </div>
 
-        {/* Inputs */}
         <div>
-          <p className="mb-2 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">
-            Entrees
-          </p>
+          <p className="mb-2 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">Entrées</p>
           <ul className="space-y-1">
             {op.inputs.map((inp) => (
-              <li
-                key={inp}
-                className="flex items-center gap-2 font-mono text-xs text-ink/65"
-              >
-                <span className="text-chrome-dark">→</span>
+              <li key={inp} className="flex items-center gap-2 font-mono text-xs text-ink/65">
+                <span className="text-chrome-dark shrink-0">→</span>
                 {inp}
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Outputs */}
         <div>
-          <p className="mb-2 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">
-            Sorties
-          </p>
+          <p className="mb-2 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">Sorties</p>
           <ul className="space-y-1">
             {op.outputs.map((out) => (
-              <li
-                key={out}
-                className="flex items-center gap-2 font-mono text-xs text-ink/65"
-              >
-                <span className="text-chrome-dark">←</span>
+              <li key={out} className="flex items-center gap-2 font-mono text-xs text-ink/65">
+                <span className="text-chrome-dark shrink-0">←</span>
                 {out}
               </li>
             ))}
           </ul>
         </div>
 
-        {/* UI Preview */}
         <div>
-          <p className="mb-2 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">
-            Apercu sortie
-          </p>
+          <p className="mb-2 font-mono text-[9px] tracking-[0.14em] text-sage uppercase">Aperçu sortie</p>
           <div className="border border-rule bg-architect-paper p-3">
-            <p className="font-mono text-[10px] leading-relaxed text-steel">
-              {op.preview}
-            </p>
+            <p className="font-mono text-[10px] leading-relaxed text-steel">{op.preview}</p>
           </div>
         </div>
       </div>
@@ -869,671 +542,628 @@ function OperatorPanel({
 }
 
 // ---------------------------------------------------------------------------
-// Specialist Card
+// Section wrapper with scroll reveal
 // ---------------------------------------------------------------------------
 
-interface Specialist {
-  id: string;
-  name: string;
-  description: string;
-  datapoints?: string;
-}
+function SectionReveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px 0px" });
 
-const SPECIALISTS: Specialist[] = [
-  {
-    id: "AG001-RI",
-    name: "Pilot — Risques",
-    description:
-      "Cartographie des risques, visualisation des risques critiques. Identifie et classe les expositions en temps réel.",
-    datapoints: "40 000 points de données risque",
-  },
-  {
-    id: "AG001-RH",
-    name: "Pilot — Ressources Humaines",
-    description:
-      "Analyse data employés, optimisation des ressources, tableaux de bord RH. Turnover, absentéisme, performance.",
-    datapoints: undefined,
-  },
-];
-
-function SpecialistCard({ spec }: { spec: Specialist }) {
   return (
     <motion.div
-      whileHover={{ borderColor: "#9A968E" }}
-      transition={{ duration: 0.18 }}
-      className="group border border-rule bg-warm-paper p-8 cursor-default"
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="flex items-start justify-between mb-3">
-        <span className="font-mono text-[9px] tracking-[0.16em] text-steel">
-          {spec.id}
-        </span>
-        <span className="h-1.5 w-1.5 rounded-full bg-chrome transition-colors duration-200 group-hover:bg-chrome-dark" />
-      </div>
-      <h3 className="font-sans text-base font-medium text-ink mb-2">
-        {spec.name}
-      </h3>
-      <p className="font-sans text-sm leading-relaxed text-sage mb-4">
-        {spec.description}
-      </p>
-      {spec.datapoints && (
-        <div className="border-t border-rule pt-3">
-          <p className="font-mono text-[10px] tracking-[0.06em] text-steel">
-            Entraîné sur {spec.datapoints}.
-          </p>
-        </div>
-      )}
+      {children}
     </motion.div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Page
+// Page component
 // ---------------------------------------------------------------------------
 
 export default function PilotPage() {
   const [selectedOp, setSelectedOp] = useState<OperatorId | null>(null);
-  const [activeLayer, setActiveLayer] = useState<LayerId | null>(null);
+  const [activeTab, setActiveTab] = useState<LayerTabId>("TECHNIQUE");
 
-  const selectedOperator = selectedOp
-    ? OPERATORS.find((o) => o.id === selectedOp) ?? null
-    : null;
-
-  function toggleLayer(id: LayerId) {
-    setActiveLayer((prev) => (prev === id ? null : id));
-  }
+  const selectedOperator = selectedOp ? OPERATORS.find(o => o.id === selectedOp) ?? null : null;
+  const currentTab = LAYER_TABS.find(t => t.id === activeTab)!;
 
   return (
-    <div className="min-h-screen bg-architect-paper">
-      {/* Top spacer for fixed nav */}
-      <div className="pt-28 lg:pt-32" />
+    <div className="min-h-screen">
 
-      {/* ── HEADER ── */}
-      <motion.section
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="border-b border-rule bg-warm-paper"
+      {/* ================================================================ */}
+      {/* SECTION 1 — AGENT HERO (dark bg-system-green)                   */}
+      {/* ================================================================ */}
+      <section
+        className="relative min-h-screen bg-system-green blueprint-grid flex flex-col"
+        aria-label="Présentation AG001 PILOT"
       >
-        <div className="mx-auto max-w-7xl px-8 py-12 lg:px-20">
-          {/* Breadcrumb */}
-          <nav
-            aria-label="Fil d'Ariane"
-            className="mb-8 flex items-center gap-2 font-mono text-[10px] tracking-[0.12em] text-chrome-dark"
+        <div className="relative z-10 flex flex-col justify-center max-w-7xl mx-auto px-8 lg:px-20 pt-40 pb-24 flex-1">
+
+          {/* Status badge */}
+          <motion.div
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex items-center gap-2 mb-12"
           >
-            <Link href="/" className="transition-colors hover:text-ink">
-              Accueil
-            </Link>
-            <span>/</span>
-            <Link href="/agents/pilot" className="transition-colors hover:text-ink">
-              Agents
-            </Link>
-            <span>/</span>
-            <span className="text-ink">Pilot</span>
-          </nav>
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-green opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-signal-green" />
+            </span>
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-signal-green">ACTIF</span>
+          </motion.div>
 
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div className="space-y-4 max-w-2xl">
-              {/* Agent ID */}
-              <div className="flex items-center gap-4">
-                <span className="font-mono text-[10px] tracking-[0.18em] text-steel">
-                  AG001 — PILOT
-                </span>
-                {/* Status badge */}
-                <span className="inline-flex items-center gap-1.5 border border-signal-green px-2 py-0.5 font-mono text-[9px] tracking-[0.12em] text-signal-green">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-green opacity-75" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal-green" />
-                  </span>
-                  ACTIF
-                </span>
+          {/* Agent code */}
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="font-mono text-xs tracking-[0.2em] uppercase text-chrome mb-4"
+          >
+            AG001
+          </motion.span>
+
+          {/* Agent name */}
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            className="font-sans font-light text-architect-paper leading-[0.9] tracking-tight mb-6"
+            style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}
+          >
+            PILOT
+          </motion.h1>
+
+          {/* Tagline */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
+            className="font-sans font-light text-architect-paper/60 max-w-xl leading-relaxed mb-12"
+            style={{ fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
+          >
+            Requêtez votre base de données en langage naturel. Analysez, explorez, décidez.
+          </motion.p>
+
+          {/* Key metrics */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="flex flex-wrap gap-8 mb-14"
+          >
+            {["4 opérateurs", "2 variantes spécialisées", "< 5 jours de déploiement"].map((m) => (
+              <div key={m} className="flex items-center gap-2">
+                <span className="font-mono text-[10px] tracking-[0.15em] text-chrome uppercase">—</span>
+                <span className="font-mono text-sm text-architect-paper/80 tracking-widest">{m}</span>
               </div>
+            ))}
+          </motion.div>
 
-              <h1 className="font-sans text-4xl font-semibold tracking-tight text-ink lg:text-5xl">
-                Assisted Data Analysis
-              </h1>
-
-              <p className="font-sans text-base leading-relaxed text-ink/65">
-                Pilot prend votre base de données en entrée, comprend son
-                contexte en langage naturel, et génère les rapports les plus
-                pertinents. Vous explorez ensuite vos données comme vous
-                poseriez une question à un collègue.
-              </p>
-            </div>
-
-            {/* Hero photo */}
-            <div className="relative w-full lg:w-80 xl:w-96 shrink-0">
-              <div className="relative aspect-[4/3] overflow-hidden border border-rule">
-                <Image
-                  src="/photos/photo-1616272963049-da2d8efc0c57.avif"
-                  alt="Data analysis interface"
-                  fill
-                  className="object-cover grayscale"
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 384px"
-                />
-                <div className="absolute inset-0 bg-system-green/20 mix-blend-multiply" />
-                <div className="absolute bottom-0 left-0 right-0 border-t border-rule/50 bg-system-green/80 px-3 py-1.5">
-                  <p className="font-mono text-[8px] tracking-[0.1em] text-chrome-light">
-                    AG001 / PILOT / DATA INTERFACE
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.65 }}
+          >
+            <a
+              href="mailto:contact@liteops.fr?subject=Démo PILOT AG001"
+              className="group inline-flex items-center gap-3 border border-architect-paper/30 px-8 py-4 font-mono text-sm text-architect-paper/80 tracking-widest uppercase transition-all duration-300 hover:border-signal-green hover:text-signal-green hover:bg-signal-green/5"
+            >
+              Demander une démo
+              <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
+            </a>
+          </motion.div>
         </div>
-      </motion.section>
 
-      {/* ── ZONE 1 — SCHEMA ── */}
-      <section className="border-t border-chrome-light/40 border-b border-rule" aria-labelledby="schema-heading">
-        <div className="mx-auto max-w-7xl px-8 py-20 lg:px-20 lg:py-24">
-          <div className="mb-6 flex items-center justify-between">
-            <div>
-              <p className="mb-1 font-mono text-[9px] tracking-[0.18em] text-chrome">
-                01 / SCHEMA
-              </p>
-              <h2
-                id="schema-heading"
-                className="font-sans text-xl font-medium text-ink"
-              >
-                Pipeline AG001
-              </h2>
-            </div>
-            <p className="hidden font-mono text-[9px] tracking-[0.1em] text-chrome sm:block">
-              Cliquez sur un opérateur pour les détails
-            </p>
-          </div>
-
-          {/* Diagram + panel layout */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
-            {/* SVG Diagram */}
-            <div className="border border-rule bg-warm-paper p-8 lg:p-12">
-              <PipelineDiagram
-                selectedOp={selectedOp}
-                onSelectOp={setSelectedOp}
-                activeLayer={activeLayer}
-              />
-            </div>
-
-            {/* Operator detail panel */}
-            <div className="min-h-[200px]">
-              <AnimatePresence mode="wait">
-                {selectedOperator ? (
-                  <OperatorPanel
-                    key={selectedOperator.id}
-                    op={selectedOperator}
-                    onClose={() => setSelectedOp(null)}
-                  />
-                ) : (
-                  <motion.div
-                    key="placeholder"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex h-full min-h-[200px] items-center justify-center border border-rule border-dashed"
-                  >
-                    <p className="font-mono text-[10px] tracking-[0.1em] text-rule">
-                      Sélectionnez un opérateur
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
+        {/* Bottom rule */}
+        <div className="border-t border-architect-paper/10 max-w-7xl mx-auto px-8 lg:px-20 w-full py-6 flex items-center justify-between">
+          <span className="font-mono text-[10px] text-chrome tracking-widest">LITE OPS / AG001</span>
+          <Link
+            href="/operateurs"
+            className="font-mono text-[10px] text-chrome-dark hover:text-architect-paper transition-colors tracking-widest uppercase"
+          >
+            Voir les opérateurs →
+          </Link>
         </div>
       </section>
 
-      {/* ── ZONE 3 — LAYERS TOGGLE ── */}
-      <section className="border-t border-chrome-light/40 border-b border-rule bg-warm-paper" aria-labelledby="layers-heading">
-        <div className="mx-auto max-w-7xl px-8 py-20 lg:px-20 lg:py-24">
-          <div className="mb-6">
-            <p className="mb-1 font-mono text-[9px] tracking-[0.18em] text-chrome">
-              02 / CALQUES
-            </p>
+      {/* ================================================================ */}
+      {/* SECTION 2 — PIPELINE                                             */}
+      {/* ================================================================ */}
+      <section
+        className="bg-architect-paper blueprint-grid py-24 lg:py-32"
+        aria-labelledby="pipeline-heading"
+      >
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <SectionReveal className="mb-10">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">
+              Pipeline de traitement
+            </span>
             <h2
-              id="layers-heading"
-              className="font-sans text-xl font-medium text-ink"
+              id="pipeline-heading"
+              className="mt-3 font-sans font-light text-system-green leading-tight"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
-              Layers
+              Quatre opérateurs. Un flux continu.
             </h2>
-            <p className="mt-1 font-sans text-sm text-sage">
-              Superposez les calques sur le schéma pour explorer chaque
-              dimension du système.
-            </p>
-          </div>
+          </SectionReveal>
 
-          <div className="flex flex-wrap gap-3">
-            {LAYERS.map((layer) => {
-              const isActive = activeLayer === layer.id;
-              return (
+          <SectionReveal delay={0.1}>
+            {/* SVG diagram */}
+            <div className="border border-rule bg-warm-paper p-6 lg:p-10 mb-6">
+              <PipelineDiagram selectedOp={selectedOp} onSelectOp={setSelectedOp} />
+            </div>
+
+            {/* Operator pills */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {OPERATORS.map(op => (
                 <button
-                  key={layer.id}
-                  onClick={() => toggleLayer(layer.id)}
+                  key={op.id}
+                  type="button"
+                  onClick={() => setSelectedOp(prev => prev === op.id ? null : op.id)}
+                  aria-pressed={selectedOp === op.id}
                   className={[
-                    "group flex flex-col gap-1 border px-5 py-4 text-left transition-all duration-200",
-                    isActive
+                    "font-mono text-[9px] tracking-[0.15em] px-3 py-1.5 border transition-all duration-200",
+                    selectedOp === op.id
                       ? "border-signal-green bg-signal-green/10 text-signal-green"
-                      : "border-chrome text-steel hover:border-chrome-dark",
+                      : "border-chrome text-steel hover:border-chrome-dark hover:text-ink",
                   ].join(" ")}
-                  aria-pressed={isActive}
-                  aria-label={`Calque ${layer.label}: ${layer.description}`}
                 >
-                  <span
-                    className={[
-                      "font-mono text-[9px] tracking-[0.16em] font-medium",
-                      isActive ? "text-signal-green" : "text-steel",
-                    ].join(" ")}
-                  >
-                    {isActive ? "● " : "○ "}
-                    {layer.label}
-                  </span>
-                  <span
-                    className={[
-                      "font-sans text-xs",
-                      isActive ? "text-signal-green/70" : "text-sage",
-                    ].join(" ")}
-                  >
-                    {layer.description}
-                  </span>
+                  {op.code} {op.label}
                 </button>
-              );
-            })}
-          </div>
+              ))}
+            </div>
 
-          {activeLayer && (
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-4 border border-rule bg-architect-paper px-4 py-3"
-            >
-              <p className="font-mono text-[10px] tracking-[0.1em] text-moss">
-                Calque actif: {LAYERS.find((l) => l.id === activeLayer)?.label} — Overlay visible sur le schéma ci-dessus.
-              </p>
-            </motion.div>
-          )}
+            {/* Detail panel */}
+            <AnimatePresence mode="wait">
+              {selectedOperator ? (
+                <OperatorPanel
+                  key={selectedOperator.id}
+                  op={selectedOperator}
+                  onClose={() => setSelectedOp(null)}
+                />
+              ) : (
+                <motion.div
+                  key="placeholder"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex h-20 items-center justify-center border border-dashed border-rule"
+                >
+                  <p className="font-mono text-[10px] tracking-[0.1em] text-chrome">
+                    Sélectionnez un opérateur pour voir les détails
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </SectionReveal>
         </div>
       </section>
 
-      {/* ── ZONE 4 — SPECIALISTS ── */}
-      <section className="border-t border-chrome-light/40 border-b border-rule" aria-labelledby="specialists-heading">
-        <div className="mx-auto max-w-7xl px-8 py-20 lg:px-20 lg:py-24">
-          <div className="mb-8">
-            <p className="mb-1 font-mono text-[9px] tracking-[0.18em] text-chrome">
-              03 / SPECIALISTES
-            </p>
+      {/* ================================================================ */}
+      {/* SECTION 3 — OPERATORS DETAIL                                     */}
+      {/* ================================================================ */}
+      <section
+        className="bg-warm-paper py-24 lg:py-32"
+        aria-labelledby="operators-heading"
+      >
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <SectionReveal className="mb-12">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">
+              Les opérateurs
+            </span>
             <h2
-              id="specialists-heading"
-              className="font-sans text-xl font-medium text-ink"
+              id="operators-heading"
+              className="mt-3 font-sans font-light text-system-green leading-tight"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
-              Versions spécialisées
+              Chaque brique, documentée.
             </h2>
-            <p className="mt-1 font-sans text-sm text-sage">
-              Pilot déployé avec un entraînement métier spécifique.
-            </p>
-          </div>
+          </SectionReveal>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {SPECIALISTS.map((spec) => (
-              <SpecialistCard key={spec.id} spec={spec} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {OPERATORS.map((op, i) => (
+              <SectionReveal key={op.id} delay={i * 0.08}>
+                <div className="border border-rule bg-architect-paper p-8 hover:border-chrome-dark transition-colors duration-200">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="font-mono text-[10px] tracking-widest text-signal-green bg-system-green px-2 py-0.5">
+                      {op.code}
+                    </span>
+                    <span className="font-mono text-xs text-steel tracking-widest">{op.label}</span>
+                  </div>
+
+                  <h3 className="font-sans font-light text-ink text-lg mb-2">{op.description}</h3>
+                  <p className="font-sans text-sm leading-relaxed text-ink/60 mb-6">{op.role}</p>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <p className="font-mono text-[9px] tracking-widest text-chrome-dark uppercase mb-2">Entrées</p>
+                      <ul className="space-y-1">
+                        {op.inputs.map(inp => (
+                          <li key={inp} className="font-mono text-[10px] text-steel flex items-start gap-1.5">
+                            <span className="text-chrome-dark shrink-0 mt-0.5">→</span>
+                            {inp}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="font-mono text-[9px] tracking-widest text-chrome-dark uppercase mb-2">Sorties</p>
+                      <ul className="space-y-1">
+                        {op.outputs.map(out => (
+                          <li key={out} className="font-mono text-[10px] text-steel flex items-start gap-1.5">
+                            <span className="text-chrome-dark shrink-0 mt-0.5">←</span>
+                            {out}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-rule pt-4">
+                    <p className="font-mono text-[9px] tracking-widest text-chrome-dark uppercase mb-1">Aperçu</p>
+                    <p className="font-mono text-[10px] text-steel leading-relaxed">{op.preview}</p>
+                  </div>
+                </div>
+              </SectionReveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── ZONE 5 — DEPLOYMENT ── */}
-      <section className="border-t border-chrome-light/40 border-b border-rule bg-warm-paper" aria-labelledby="deployment-heading">
-        <div className="mx-auto max-w-7xl px-8 py-20 lg:px-20 lg:py-24">
-          <div className="mb-8">
-            <p className="mb-1 font-mono text-[9px] tracking-[0.18em] text-chrome">
-              04 / DÉPLOIEMENT
-            </p>
+      {/* ================================================================ */}
+      {/* SECTION 4 — LAYERS                                               */}
+      {/* ================================================================ */}
+      <section
+        className="bg-architect-paper py-24 lg:py-32"
+        aria-labelledby="layers-heading"
+      >
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <SectionReveal className="mb-12">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">Expertise</span>
             <h2
-              id="deployment-heading"
-              className="font-sans text-xl font-medium text-ink"
+              id="layers-heading"
+              className="mt-3 font-sans font-light text-system-green leading-tight"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
-              Options de déploiement
+              Trois couches d'intégration
             </h2>
-          </div>
+          </SectionReveal>
 
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-            {/* Version Locale */}
-            <div className="border border-rule bg-architect-paper">
-              <div className="border-b border-rule bg-system-green px-5 py-3">
-                <span className="font-mono text-[9px] tracking-[0.16em] text-chrome">
-                  DEPLOY-01
-                </span>
-                <h3 className="font-sans text-base font-medium text-architect-paper">
-                  Version Locale
-                </h3>
-              </div>
-              <div className="p-6 space-y-4">
-                <p className="font-sans text-sm leading-relaxed text-ink/65">
-                  100% sur votre poste. Mini-modèles (Mistral 3B, Qwen 3.5).
-                  Zéro sortie réseau. Immédiat.
-                </p>
-                <ul className="space-y-2">
-                  {[
-                    "Données jamais quittent vos serveurs",
-                    "Modèles compacts et rapides",
-                    "Installation en quelques minutes",
-                    "Fonctionne sans connexion internet",
-                  ].map((feat) => (
-                    <li
-                      key={feat}
-                      className="flex items-start gap-2 font-mono text-[11px] text-ink"
-                    >
-                      <span className="mt-px shrink-0 text-moss">+</span>
-                      {feat}
-                    </li>
-                  ))}
-                </ul>
-                <div className="border-t border-rule pt-4">
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { label: "Modèle", value: "Mistral 3B / Qwen 3.5" },
-                      { label: "Réseau", value: "Zéro" },
-                      { label: "Setup", value: "< 30 min" },
-                      { label: "Souveraineté", value: "Totale" },
-                    ].map((item) => (
-                      <div key={item.label}>
-                        <p className="font-mono text-[8px] tracking-[0.1em] text-sage">
-                          {item.label}
-                        </p>
-                        <p className="font-mono text-xs font-medium text-ink">
-                          {item.value}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+          <SectionReveal delay={0.1}>
+            {/* Tab switcher */}
+            <div className="flex flex-wrap gap-0 border border-rule mb-8">
+              {LAYER_TABS.map(tab => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  aria-pressed={activeTab === tab.id}
+                  className={[
+                    "flex-1 px-6 py-4 font-mono text-xs tracking-widest uppercase text-left border-r border-rule last:border-r-0 transition-all duration-200",
+                    activeTab === tab.id
+                      ? "bg-system-green text-architect-paper"
+                      : "bg-warm-paper text-steel hover:bg-fog hover:text-ink",
+                  ].join(" ")}
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
 
-            {/* Version SaaS */}
-            <div className="border border-rule bg-architect-paper">
-              <div className="border-b border-rule bg-system-green px-5 py-3">
-                <span className="font-mono text-[9px] tracking-[0.16em] text-chrome">
-                  DEPLOY-02
-                </span>
-                <h3 className="font-sans text-base font-medium text-architect-paper">
-                  Version SaaS
-                </h3>
-              </div>
-              <div className="p-6 space-y-4">
-                <p className="font-sans text-sm leading-relaxed text-ink/65">
-                  Cloud Scaleway ZDR. Modèles puissants. Plateforme Namibia
-                  disponible. Clé en main.
-                </p>
-                <ul className="space-y-2">
-                  {[
-                    "Hébergement Scaleway Zone de Données Régulées",
-                    "GPT-4o, Claude 3.5 Sonnet et plus",
-                    "Plateforme Namibia intégrée",
-                    "Mises à jour automatiques",
-                  ].map((feat) => (
-                    <li
-                      key={feat}
-                      className="flex items-start gap-2 font-mono text-[11px] text-ink"
-                    >
-                      <span className="mt-px shrink-0 text-chrome-dark">+</span>
-                      {feat}
-                    </li>
-                  ))}
-                </ul>
-                <div className="border-t border-rule pt-4">
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { label: "Infra", value: "Scaleway ZDR" },
-                      { label: "Conformité", value: "RGPD / HDS" },
-                      { label: "Setup", value: "Clé en main" },
-                      { label: "SLA", value: "99.9%" },
-                    ].map((item) => (
-                      <div key={item.label}>
-                        <p className="font-mono text-[8px] tracking-[0.1em] text-sage">
-                          {item.label}
-                        </p>
-                        <p className="font-mono text-xs font-medium text-ink">
-                          {item.value}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── ZONE 6 — ECOSYSTEM ── */}
-      <section className="border-t border-chrome-light/40 border-b border-rule" aria-labelledby="ecosystem-heading">
-        <div className="mx-auto max-w-7xl px-8 py-20 lg:px-20 lg:py-24">
-          <div className="mb-8">
-            <p className="mb-1 font-mono text-[9px] tracking-[0.18em] text-chrome">
-              05 / ECOSYSTEME
-            </p>
-            <h2
-              id="ecosystem-heading"
-              className="font-sans text-xl font-medium text-ink"
-            >
-              Ecosystem
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            {/* Agents lies */}
-            <div className="space-y-4">
-              <p className="font-mono text-[9px] tracking-[0.16em] text-sage uppercase">
-                Agents associés
-              </p>
-              <Link
-                href="/agents/sailor"
-                className="group flex items-center justify-between border border-rule bg-warm-paper px-4 py-3 transition-colors hover:border-ink"
+            {/* Tab content */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-10"
               >
                 <div>
-                  <span className="font-mono text-[8px] tracking-[0.1em] text-sage">
-                    AG002
-                  </span>
-                  <p className="font-sans text-sm font-medium text-ink">
-                    Sailor
-                  </p>
-                  <p className="font-sans text-xs text-sage">
-                    Process Automation
+                  <p className="font-sans leading-relaxed text-ink/65 mb-8">
+                    {currentTab.description}
                   </p>
                 </div>
-                <span className="font-mono text-xs text-steel transition-colors group-hover:text-ink">
-                  →
-                </span>
-              </Link>
-            </div>
-
-            {/* Systemes qui utilisent Pilot */}
-            <div className="space-y-4">
-              <p className="font-mono text-[9px] tracking-[0.16em] text-sage uppercase">
-                Systèmes intégrant Pilot
-              </p>
-              <div className="space-y-2">
-                {[
-                  { label: "Système Risque", desc: "Cartographie et monitoring" },
-                  { label: "Système Recrutement", desc: "Analyse candidats & RH" },
-                ].map((sys) => (
-                  <div
-                    key={sys.label}
-                    className="flex items-center justify-between border border-rule bg-warm-paper px-4 py-3"
-                  >
-                    <div>
-                      <p className="font-sans text-sm font-medium text-ink">
-                        {sys.label}
-                      </p>
-                      <p className="font-sans text-xs text-sage">{sys.desc}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {currentTab.annotations.map((ann, i) => (
+                    <div key={i} className="border border-rule bg-fog px-4 py-3">
+                      <span className="font-mono text-[9px] tracking-widest text-chrome-dark block mb-1">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <p className="font-mono text-[10px] text-ink/70 leading-relaxed">{ann}</p>
                     </div>
-                    <span className="font-mono text-[9px] tracking-[0.1em] text-rule">
-                      AG001
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </SectionReveal>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/* SECTION 5 — SCREENSHOTS                                          */}
+      {/* ================================================================ */}
+      <section
+        className="bg-fog py-24 lg:py-32"
+        aria-labelledby="screenshots-heading"
+      >
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <SectionReveal className="mb-12">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">Aperçu produit</span>
+            <h2
+              id="screenshots-heading"
+              className="mt-3 font-sans font-light text-system-green leading-tight"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
+            >
+              Le produit, en contexte.
+            </h2>
+          </SectionReveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {SCREENSHOTS.map((shot, i) => (
+              <SectionReveal key={shot.src} delay={i * 0.1}>
+                {/* Browser chrome mock */}
+                <div className="border border-rule overflow-hidden">
+                  {/* Browser bar */}
+                  <div className="bg-system-green flex items-center gap-2 px-4 py-2.5">
+                    <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
+                    <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
+                    <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
+                    <span className="flex-1 mx-4 h-4 bg-architect-paper/10 rounded-none border border-architect-paper/10 font-mono text-[8px] text-chrome-light text-center leading-4 tracking-wider">
+                      pilot.liteops.fr
                     </span>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Photo + CTA */}
-            <div className="space-y-4">
-              <p className="font-mono text-[9px] tracking-[0.16em] text-sage uppercase">
-                Mise en œuvre
-              </p>
-              <div className="relative aspect-video overflow-hidden border border-rule">
-                <Image
-                  src="/photos/photo-1739086759198-b99a6e3f8599.avif"
-                  alt="Pilot deployment"
-                  fill
-                  className="object-cover grayscale"
-                  sizes="(max-width: 1024px) 100vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-system-green/30 mix-blend-multiply" />
-              </div>
-              <Link
-                href="#contact"
-                className="block border border-signal-green bg-signal-green px-5 py-3 text-center font-mono text-xs font-medium tracking-[0.14em] text-system-green transition-all duration-200 hover:bg-signal-green/80 hover:border-signal-green/80"
-              >
-                Demander une démo
-              </Link>
-            </div>
+                  {/* Screenshot */}
+                  <div className="relative aspect-[16/10] bg-warm-paper">
+                    <Image
+                      src={shot.src}
+                      alt={shot.alt}
+                      fill
+                      className="object-cover object-top"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+                </div>
+                <p className="mt-3 font-mono text-[10px] tracking-widest text-steel uppercase">
+                  — {shot.caption}
+                </p>
+              </SectionReveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── ZONE 7 — PRICING ── */}
-      <section className="border-t border-chrome-light/40 border-b border-rule bg-warm-paper" aria-labelledby="pricing-heading">
-        <div className="mx-auto max-w-7xl px-8 py-20 lg:px-20 lg:py-24">
-          <div className="mb-8">
-            <p className="mb-1 font-mono text-[9px] tracking-[0.18em] text-chrome">
-              06 / BUDGET
-            </p>
+      {/* ================================================================ */}
+      {/* SECTION 6 — SPECIALISTS                                          */}
+      {/* ================================================================ */}
+      <section
+        className="bg-warm-paper py-24 lg:py-32"
+        aria-labelledby="specialists-heading"
+      >
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <SectionReveal className="mb-12">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">Variantes</span>
+            <h2
+              id="specialists-heading"
+              className="mt-3 font-sans font-light text-system-green leading-tight"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
+            >
+              Pour chaque contexte.
+            </h2>
+          </SectionReveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {SPECIALISTS.map((spec, i) => (
+              <SectionReveal key={spec.code} delay={i * 0.1}>
+                <div className="border border-rule bg-architect-paper p-8 h-full">
+                  <div className="flex items-center gap-3 mb-6">
+                    <span className="font-mono text-[10px] tracking-widest text-signal-green bg-system-green px-2 py-0.5">
+                      {spec.code}
+                    </span>
+                  </div>
+
+                  <h3
+                    className="font-sans font-light text-system-green mb-1"
+                    style={{ fontSize: "clamp(1.1rem, 1.5vw, 1.4rem)" }}
+                  >
+                    {spec.name}
+                  </h3>
+                  <p className="font-mono text-xs text-chrome-dark tracking-widest uppercase mb-4">{spec.tagline}</p>
+                  <p className="font-sans text-sm leading-relaxed text-ink/65 mb-6">{spec.description}</p>
+
+                  <div className="border-t border-rule pt-6">
+                    <p className="font-mono text-[9px] tracking-widest text-chrome-dark uppercase mb-3">Cas d'usage</p>
+                    <ul className="space-y-2">
+                      {spec.uses.map(use => (
+                        <li key={use} className="flex items-start gap-2 font-mono text-[10px] text-ink/65">
+                          <span className="text-chrome-dark shrink-0 mt-0.5">—</span>
+                          {use}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </SectionReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/* SECTION 7 — PRICING                                              */}
+      {/* ================================================================ */}
+      <section
+        className="bg-architect-paper py-24 lg:py-32"
+        aria-labelledby="pricing-heading"
+      >
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <SectionReveal className="mb-12">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark">Tarification</span>
             <h2
               id="pricing-heading"
-              className="font-sans text-xl font-medium text-ink"
+              className="mt-3 font-sans font-light text-system-green leading-tight"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
-              Tarification
+              Simple et transparent.
             </h2>
-          </div>
+          </SectionReveal>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            {/* Pricing model */}
-            <div className="space-y-6">
-              <div className="flex flex-col gap-4">
-                {[
-                  {
-                    code: "FEE-01",
-                    label: "Budget fixe de setup",
-                    desc: "Déploiement, intégration, configuration initiale. Budget défini avant démarrage.",
-                  },
-                  {
-                    code: "FEE-02",
-                    label: "Licence mensuelle",
-                    desc: "Utilisation continue de Pilot, mises à jour incluses, support technique.",
-                  },
-                  {
-                    code: "FEE-03",
-                    label: "Fees custom si besoin",
-                    desc: "Développements spécifiques, intégrateurs tiers, formations avancées.",
-                  },
-                ].map((fee) => (
-                  <div
-                    key={fee.code}
-                    className="flex gap-4 border border-rule bg-architect-paper px-5 py-4"
-                  >
-                    <span className="shrink-0 font-mono text-[9px] tracking-[0.1em] text-steel mt-0.5">
-                      {fee.code}
-                    </span>
-                    <div>
-                      <p className="font-sans text-sm font-medium text-ink">
-                        {fee.label}
-                      </p>
-                      <p className="font-sans text-xs leading-relaxed text-sage mt-0.5">
-                        {fee.desc}
-                      </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {PRICING_TIERS.map((tier, i) => (
+              <SectionReveal key={tier.code} delay={i * 0.1}>
+                <div
+                  className={[
+                    "border p-8 h-full flex flex-col",
+                    tier.highlight
+                      ? "border-signal-green bg-signal-green/5"
+                      : "border-rule bg-warm-paper",
+                  ].join(" ")}
+                >
+                  {tier.highlight && (
+                    <div className="mb-4">
+                      <span className="font-mono text-[9px] tracking-widest text-signal-green uppercase border border-signal-green px-2 py-0.5">
+                        Recommandé
+                      </span>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+                  )}
 
-            {/* Financement + photo */}
-            <div className="space-y-4">
-              <div className="border border-rule bg-green-tint p-6 space-y-3">
-                <p className="font-mono text-[9px] tracking-[0.16em] text-moss uppercase">
-                  Aide au financement
-                </p>
-                <p className="font-sans text-sm leading-relaxed text-ink/65">
-                  Nous aidons au financement : BPI France, dispositifs
-                  regionaux, credit d&apos;impot innovation (CII).
-                </p>
-                <ul className="space-y-1.5">
-                  {[
-                    "BPI France — subventions et prêts innovants",
-                    "Crédit d'impôt innovation (CII)",
-                    "Dispositifs régionaux et européens",
-                  ].map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-center gap-2 font-mono text-[10px] text-moss"
+                  <span className="font-mono text-[10px] tracking-widest text-chrome-dark block mb-2">{tier.code}</span>
+                  <h3 className="font-sans font-light text-system-green text-2xl mb-1">{tier.name}</h3>
+
+                  <div className="flex items-baseline gap-1 mb-3">
+                    <span
+                      className={[
+                        "font-mono font-medium text-2xl",
+                        tier.highlight ? "text-signal-green" : "text-ink",
+                      ].join(" ")}
                     >
-                      <span>→</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                      {tier.price}
+                    </span>
+                    {tier.unit && (
+                      <span className="font-mono text-xs text-steel">{tier.unit}</span>
+                    )}
+                  </div>
 
-              <div className="relative aspect-video overflow-hidden border border-rule">
-                <Image
-                  src="/photos/photo-1553748024-dd3fd69ab116.avif"
-                  alt="Lite Ops team"
-                  fill
-                  className="object-cover grayscale"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-system-green/25 mix-blend-multiply" />
-              </div>
-            </div>
+                  <p className="font-sans text-sm text-ink/60 leading-relaxed mb-6">{tier.description}</p>
+
+                  <div className="border-t border-rule pt-6 flex-1">
+                    <ul className="space-y-2">
+                      {tier.features.map(feat => (
+                        <li key={feat} className="flex items-start gap-2 font-mono text-[10px] text-ink/65">
+                          <span className="text-signal-green shrink-0 mt-0.5">✓</span>
+                          {feat}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-8">
+                    <a
+                      href="mailto:contact@liteops.fr?subject=PILOT - Offre {tier.name}"
+                      className={[
+                        "group inline-flex items-center gap-2 w-full justify-center border px-6 py-3 font-mono text-xs tracking-widest uppercase transition-all duration-200",
+                        tier.highlight
+                          ? "border-signal-green text-signal-green hover:bg-signal-green hover:text-system-green"
+                          : "border-rule text-steel hover:border-chrome-dark hover:text-ink",
+                      ].join(" ")}
+                    >
+                      Commencer
+                      <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
+                    </a>
+                  </div>
+                </div>
+              </SectionReveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── BOTTOM CTA ── */}
-      <section className="bg-system-green" aria-labelledby="cta-heading">
-        <div className="mx-auto max-w-7xl px-8 py-16 lg:px-20">
-          <div className="flex flex-col items-start gap-8 lg:flex-row lg:items-center lg:justify-between">
-            <div className="space-y-3">
-              <span className="font-mono text-[9px] tracking-[0.16em] text-chrome">
-                AG001 — PILOT
-              </span>
-              <h2
-                id="cta-heading"
-                className="font-sans text-2xl font-semibold text-architect-paper lg:text-3xl"
-              >
-                Prêt à analyser vos données autrement ?
-              </h2>
-              <p className="font-sans text-sm leading-relaxed text-sage max-w-lg">
-                Démonstration en contexte réel sur vos données. Mise en œuvre
-                en quelques semaines.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="#contact"
-                className="border border-signal-green bg-signal-green px-6 py-3 font-mono text-xs font-medium tracking-[0.14em] text-system-green transition-all duration-200 hover:bg-signal-green/80 hover:border-signal-green/80"
-              >
-                Demander une démo
-              </Link>
+      {/* ================================================================ */}
+      {/* SECTION 8 — AGENT NAV                                            */}
+      {/* ================================================================ */}
+      <section
+        className="bg-system-green blueprint-grid py-24 lg:py-32"
+        aria-label="Autres agents"
+      >
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <SectionReveal className="mb-12">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome">Autres agents</span>
+          </SectionReveal>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* SAILOR */}
+            <SectionReveal delay={0.05}>
               <Link
                 href="/agents/sailor"
-                className="border border-chrome-dark px-6 py-3 font-mono text-xs font-medium tracking-[0.14em] text-architect-paper transition-all duration-200 hover:border-architect-paper"
+                className="group flex flex-col justify-between border border-architect-paper/20 p-8 hover:border-architect-paper/50 transition-all duration-300 min-h-[180px]"
               >
-                Voir Sailor →
+                <div>
+                  <span className="font-mono text-[10px] tracking-widest text-chrome block mb-2">AG002</span>
+                  <h3
+                    className="font-sans font-light text-architect-paper mb-3"
+                    style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.5rem)" }}
+                  >
+                    SAILOR
+                  </h3>
+                  <p className="font-mono text-xs text-chrome-light/70 leading-relaxed">
+                    Transformez votre base documentaire en chatbot à sources citées.
+                  </p>
+                </div>
+                <div className="mt-6 flex items-center gap-2 font-mono text-xs text-chrome-dark uppercase tracking-widest">
+                  <span>Voir l'agent</span>
+                  <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
+                </div>
               </Link>
-            </div>
+            </SectionReveal>
+
+            {/* MATCHMAKER */}
+            <SectionReveal delay={0.1}>
+              <Link
+                href="/agents/matchmaker"
+                className="group flex flex-col justify-between border border-architect-paper/20 p-8 hover:border-architect-paper/50 transition-all duration-300 min-h-[180px]"
+              >
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="font-mono text-[10px] tracking-widest text-chrome">AG003</span>
+                    <span className="font-mono text-[9px] tracking-widest text-steel border border-steel/40 px-1.5 py-0.5">EN DÉVELOPPEMENT</span>
+                  </div>
+                  <h3
+                    className="font-sans font-light text-architect-paper mb-3"
+                    style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.5rem)" }}
+                  >
+                    MATCHMAKER
+                  </h3>
+                  <p className="font-mono text-xs text-chrome-light/70 leading-relaxed">
+                    Faites correspondre vos ressources aux besoins. Score radar expliqué.
+                  </p>
+                </div>
+                <div className="mt-6 flex items-center gap-2 font-mono text-xs text-chrome-dark uppercase tracking-widest">
+                  <span>Voir l'agent</span>
+                  <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
+                </div>
+              </Link>
+            </SectionReveal>
           </div>
         </div>
       </section>
+
     </div>
   );
 }

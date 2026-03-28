@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 
@@ -9,7 +8,7 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 // Types
 // ---------------------------------------------------------------------------
 
-type OperatorId = "DATA_LAYER" | "OCR" | "DOC_UNDERSTANDING" | "EMBEDDING_RAG" | "LLM";
+type OperatorId = "DATA_LAYER" | "EMBEDDING" | "NLP_PARSER" | "MATCH_ENGINE" | "SCORER" | "CONV_AGENT";
 type LayerTabId = "TECHNIQUE" | "METIER" | "ADAPTATION";
 
 interface PipelineOperator {
@@ -61,93 +60,111 @@ const OPERATORS: PipelineOperator[] = [
     id: "DATA_LAYER",
     code: "OP-01",
     label: "DATA LAYER",
-    description: "Ingestion documentaire",
-    role: "Connecteur multi-format — ingère tout type de document (PDF, DOCX, HTML, images), normalise, déduplique, versionne.",
+    description: "Catalogue de ressources",
+    role: "Ingère et indexe le catalogue de ressources — humaines, matérielles, services, produits. Chaque ressource possède des caractéristiques structurées (nom, description, compétences, prix, références avec KPIs).",
     inputs: [
-      "PDF, DOCX, XLSX, HTML, TXT",
-      "Images (PNG, JPG)",
-      "URLs et pages web",
+      "Profils humains (DRH)",
+      "Catalogues produits/services",
+      "Fiches matériels",
+      "Références et KPIs historiques",
     ],
     outputs: [
-      "Texte structuré extrait",
-      "Métadonnées préservées",
-      "Corpus versionné",
+      "Catalogue normalisé",
+      "Graphe de relations ressources",
+      "Index structuré multi-type",
     ],
-    preview: "847 documents ingérés. 0 doublons. Version: 2026-03-28T09:14Z",
-    x: 80, y: 130, w: 130, h: 68,
+    preview: "1 247 ressources indexées — 340 humaines, 512 produits, 395 services. Dernière MAJ: il y a 3h.",
+    x: 60, y: 130, w: 120, h: 68,
   },
   {
-    id: "OCR",
+    id: "EMBEDDING",
     code: "OP-02",
-    label: "OCR",
-    description: "Extraction texte — docs scannés",
-    role: "Tesseract 5 + modèles spécialisés. Post-correction LLM. Score de confiance par bloc. Support tableaux multi-colonnes.",
+    label: "EMBEDDING",
+    description: "Représentation sémantique",
+    role: "Vectorise les ressources ET la demande entrante dans un espace sémantique partagé. Embeddings multilingues tenant compte des nuances métier, des compétences et des contraintes.",
     inputs: [
-      "Documents scannés (PDF)",
-      "Images (photos, fax, captures)",
+      "Catalogue normalisé",
+      "Demande / fiche de poste / AO",
     ],
     outputs: [
-      "Texte extrait avec score confiance",
-      "Blocs structurés (titres, tableaux, listes)",
+      "Vecteurs ressources",
+      "Vecteur demande",
+      "Matrice de similarité",
     ],
-    preview: "OCR confiance: 97.3 %. Post-correction appliquée sur 12 blocs. 0 erreurs résiduelles.",
-    x: 240, y: 130, w: 130, h: 68,
+    preview: "Embedding demande: 1536 dims. Similarité max détectée: 0.89 (Consultant SAP S4/HANA Senior).",
+    x: 210, y: 90, w: 120, h: 68,
   },
   {
-    id: "DOC_UNDERSTANDING",
+    id: "NLP_PARSER",
     code: "OP-03",
-    label: "DOC UNDERSTANDING",
-    description: "Compréhension sémantique",
-    role: "Détecte la structure des documents (titres, sections, annexes), extrait les tableaux, identifie les relations inter-documents.",
+    label: "NLP PARSER",
+    description: "Extraction des critères",
+    role: "Analyse la demande (texte libre, PDF, AO) et en extrait les éléments principaux en format structuré: compétences requises, contraintes, budgets, délais, localisation.",
     inputs: [
-      "Texte normalisé",
-      "Métadonnées format",
+      "Demande / fiche de poste / AO en texte libre",
     ],
     outputs: [
-      "Arborescence documentaire",
-      "Tableaux extraits structurés",
-      "Graph de relations inter-docs",
+      "Critères structurés (must-have / nice-to-have)",
+      "Contraintes détectées",
+      "Poids relatifs des critères",
     ],
-    preview: "Structure détectée: 4 niveaux, 23 sections, 7 tableaux, 3 références croisées.",
-    x: 400, y: 130, w: 130, h: 68,
+    preview: "Extrait: 8 critères (3 must-have, 5 nice-to-have). Budget: 600-800€/j. Durée: 6 mois min.",
+    x: 210, y: 190, w: 120, h: 68,
   },
   {
-    id: "EMBEDDING_RAG",
+    id: "MATCH_ENGINE",
     code: "OP-04",
-    label: "EMBEDDING + RAG",
-    description: "Indexation sémantique & retrieval",
-    role: "Embeddings multilingues (FR/EN), hybrid search dense + sparse, reranking contextuel, filtrage par metadata. Top-k avec score de pertinence.",
+    label: "MATCH ENGINE",
+    description: "Moteur de correspondance",
+    role: "Calcule la correspondance entre les critères extraits et les ressources vectorisées. Gère les combinaisons de ressources complémentaires. Filtre par contraintes budgétaires et temporelles.",
     inputs: [
-      "Corpus indexé",
-      "Question utilisateur",
-      "Filtres metadata",
+      "Critères structurés",
+      "Catalogue vectorisé",
+      "Contraintes (budget, délai, localisation)",
     ],
     outputs: [
-      "Top-k extraits pertinents",
-      "Scores de pertinence",
-      "Sources avec numéro de page",
+      "Top ressources candidates",
+      "Combinaisons optimales",
+      "Scores par critère",
     ],
-    preview: "Retrieval: 5/847 docs. Score max: 0.94. Latence: 180 ms.",
-    x: 560, y: 130, w: 130, h: 68,
+    preview: "Top 5 identifiées. Meilleure combinaison: [Dupont M. + Consultant AMOA] — Score: 91/100.",
+    x: 380, y: 130, w: 120, h: 68,
   },
   {
-    id: "LLM",
+    id: "SCORER",
     code: "OP-05",
-    label: "LLM",
-    description: "Génération contrainte & sourcée",
-    role: "Génération de réponses strictement ancrée au corpus. Citations avec numéro de page. Refus explicite si hors corpus. Verbatim à la demande.",
+    label: "SCORER",
+    description: "Scoring & visualisation",
+    role: "Quantifie les raisons des choix. Génère un score global (0-100) et des scores par dimension (compétences, disponibilité, budget, références, localisation). Produit un diagramme radar structuré.",
     inputs: [
-      "Top-k extraits",
-      "Question originale",
-      "Historique conversation",
+      "Ressources candidates avec scores bruts",
+      "Pondération des critères",
     ],
     outputs: [
-      "Réponse sourcée avec citations",
-      "Verbatim extrait",
-      "Refus documenté si hors corpus",
+      "Score pondéré 0-100 par ressource",
+      "Diagramme radar par dimension",
+      "Classement final",
     ],
-    preview: 'Réponse: "Selon §3.2 (page 12): la procédure exige 48h de délai minimum." [Source: RH-2024-V3.pdf]',
-    x: 720, y: 130, w: 130, h: 68,
+    preview: "Score Dupont M.: 91/100 — Compétences: 95, Budget: 88, Références: 94, Dispo: 87.",
+    x: 540, y: 130, w: 120, h: 68,
+  },
+  {
+    id: "CONV_AGENT",
+    code: "OP-06",
+    label: "CONV AGENT",
+    description: "Raffinement conversationnel",
+    role: "Boucle de dialogue permettant à l'utilisateur de préciser ses critères, commenter les propositions, et affiner la sélection. Met à jour dynamiquement le classement selon les retours.",
+    inputs: [
+      "Résultats classés",
+      "Retour utilisateur (texte libre)",
+    ],
+    outputs: [
+      "Proposition affinée",
+      "Classement mis à jour",
+      "Rapport de sélection final",
+    ],
+    preview: 'Utilisateur: "Trop cher, cherche < 600€/j." → Recalcul: 3 nouvelles ressources identifiées.',
+    x: 700, y: 130, w: 120, h: 68,
   },
 ];
 
@@ -155,108 +172,120 @@ const LAYER_TABS: LayerTab[] = [
   {
     id: "TECHNIQUE",
     label: "Technique",
-    description: "Pipeline RAG complet — Data Layer, OCR, Doc Understanding, semantic search, génération contrainte. Hybrid search dense + sparse. Embeddings multilingues. Zéro hallucination par conception architecturale.",
+    description: "Pipeline de matching sémantique complet — embedding multilingue (1536 dims), hybrid search, scoring pondéré multi-critères, boucle conversationnelle. Chaque proposition est expliquée et quantifiée. Radar chart calculé à la volée.",
     annotations: [
-      "Connecteurs: PDF, DOCX, HTML, images, URLs",
-      "OCR: Tesseract 5 + post-correction LLM",
-      "Embeddings multilingues FR/EN",
-      "Mistral / Qwen local ou GPT-4o SaaS",
+      "Embeddings multilingues 1536 dims",
+      "Hybrid search dense + sparse",
+      "Scoring pondéré multi-critères",
+      "Radar chart D3.js généré à la volée",
     ],
   },
   {
     id: "METIER",
     label: "Métier",
-    description: "Calibré pour l'acquisition commerciale et la gestion documentaire interne. Comprend votre offre, vos procédures, vos produits. Vos équipes et prospects obtiennent des réponses précises en secondes.",
+    description: "Conçu pour DRH (ressources humaines), directeurs métier (logiciels, consultants), sociétés de conseil (portfolio de consultants), directeurs commerciaux (catalogue produits/services). Comprend les codes métier de chaque verticale.",
     annotations: [
-      "Ontologie commerciale intégrée",
-      "Vocabulaire procédures RH et conformité",
-      "Qualif prospect par la documentation",
-      "Réponse en langage du métier",
+      "Ontologie compétences RH (ROME, ESCO)",
+      "Taxonomie produits et services B2B",
+      "Scoring références et KPIs projets",
+      "Contraintes réglementaires (GDPR, appels d'offres)",
     ],
   },
   {
     id: "ADAPTATION",
     label: "Adaptation",
-    description: "Déploiement en 5 jours. Ingestion de votre corpus existant, calibration des seuils de confiance, test de couverture. Mise à jour incrémentale sans ré-indexation complète.",
+    description: "Configuration en 1 semaine. Ingestion du catalogue existant, définition des dimensions de scoring, calibration des poids par critère. Connecteurs vers vos outils (ATS, CRM, ERP).",
     annotations: [
-      "Ingestion corpus existant (< 2h)",
-      "Calibration seuils de confiance",
-      "Test de couverture documentaire",
-      "Mise à jour incrémentale",
+      "Ingestion catalogue existant",
+      "Définition des dimensions de scoring",
+      "Calibration des poids par métier",
+      "Connecteurs ATS, CRM, ERP",
     ],
   },
 ];
 
 const SPECIALISTS: Specialist[] = [
   {
-    code: "SA-01",
-    name: "Sailor Acquisition — Navigation commerciale",
-    tagline: "Qualification prospect par la documentation",
-    description: "Vos prospects naviguent dans vos offres, tarifs et propositions en langage naturel. Qualification automatique par la documentation.",
+    code: "MA-01",
+    name: "Matchmaker RH — Ressources humaines",
+    tagline: "Constitution d'équipes en quelques secondes",
+    description: "Le DRH recense ses collaborateurs et trouve la meilleure équipe-projet en quelques secondes sur base d'une fiche de poste.",
     uses: [
-      "Fiches produit et tarifs accessibles en NL",
-      "Questions/réponses sur conditions commerciales",
-      "Synthèse de propositions à la demande",
-      "Qualification prospect par le document",
+      "Matching fiche de poste → collaborateurs disponibles",
+      "Constitution d'équipes projets pluridisciplinaires",
+      "Identification des gaps de compétences",
+      "Comparaison profils avec scoring transparent",
     ],
   },
   {
-    code: "SA-02",
-    name: "Sailor Process — Navigation opérationnelle",
-    tagline: "Conformité et onboarding documentaire",
-    description: "Procédures, règlements, modes opératoires — tout accessible en une question. Conformité et onboarding facilitées.",
+    code: "MA-02",
+    name: "Matchmaker Conseil — Portfolio de consultants",
+    tagline: "Réponse aux AO avec la combinaison optimale",
+    description: "La société de conseil répond à ses appels d'offres en identifiant instantanément la combinaison optimale de consultants.",
     uses: [
-      "Procédures RH et règlements intérieurs",
-      "Modes opératoires techniques et sécurité",
-      "Documentation réglementaire et conformité",
-      "Onboarding par le corpus interne",
+      "Réponse rapide aux AO avec profils adaptés",
+      "Scoring et diagramme radar pour le client",
+      "Optimisation du staffing par disponibilité et prix",
+      "Historique de références et KPIs projets",
+    ],
+  },
+  {
+    code: "MA-03",
+    name: "Matchmaker Commercial — Produits & services",
+    tagline: "Qualification et recommandation produit automatique",
+    description: "Le directeur commercial identifie l'offre ou la combinaison de services idéale pour chaque demande client entrante.",
+    uses: [
+      "Qualification de demandes clients entrantes",
+      "Recommandation de produits ou bundles",
+      "Scoring de fit produit/besoin avec explication",
+      "Support à la négociation par données objectives",
     ],
   },
 ];
 
 const PRICING_TIERS: PricingTier[] = [
   {
-    code: "SA-STARTER",
+    code: "MA-STARTER",
     name: "Starter",
-    price: "390€",
+    price: "590€",
     unit: "/mois",
-    description: "Corpus jusqu'à 500 documents. 1 chatbot. ZDR.",
+    description: "500 ressources. 1 catalogue. 50 matchings/mois.",
     features: [
-      "500 documents max",
-      "1 interface chatbot",
-      "Citations avec source et page",
-      "Mise à jour hebdomadaire",
+      "500 ressources indexées",
+      "1 type de ressource",
+      "50 matchings par mois",
+      "Scores et radar chart",
       "Support email",
     ],
     highlight: false,
   },
   {
-    code: "SA-PRO",
+    code: "MA-PRO",
     name: "Pro",
-    price: "890€",
+    price: "1 490€",
     unit: "/mois",
-    description: "Corpus illimité. Multi-chatbots. API & Webhooks.",
+    description: "Ressources illimitées. Multi-catalogues. API.",
     features: [
-      "Documents illimités",
-      "Multi-chatbots par segment",
+      "Ressources illimitées",
+      "Multi-types de ressources",
+      "Matchings illimités",
+      "Boucle conversationnelle",
       "API REST + Webhooks",
-      "Mise à jour temps réel",
-      "Rapports de couverture",
       "Support prioritaire",
     ],
     highlight: true,
   },
   {
-    code: "SA-DEPLOY",
+    code: "MA-DEPLOY",
     name: "Local Deploy",
     price: "Sur devis",
     unit: "",
-    description: "On-premise. Modèles locaux. Zéro transit réseau.",
+    description: "On-premise. Données jamais hors site. Connecteurs sur mesure.",
     features: [
-      "Modèles Mistral 3B / Qwen",
+      "Déploiement on-premise",
+      "Connecteurs ATS/CRM/ERP",
       "Données jamais hors site",
-      "Air-gap total possible",
-      "Audit de sécurité inclus",
+      "Audit sécurité inclus",
       "SLA personnalisé",
     ],
     highlight: false,
@@ -264,23 +293,23 @@ const PRICING_TIERS: PricingTier[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// SVG Pipeline Diagram
+// SVG Pipeline Diagram — Matchmaker has parallel branches
 // ---------------------------------------------------------------------------
 
 function SvgDefs() {
   return (
     <defs>
-      <pattern id="sailor-grid-sm" width="20" height="20" patternUnits="userSpaceOnUse">
+      <pattern id="mm-grid-sm" width="20" height="20" patternUnits="userSpaceOnUse">
         <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(212,208,200,0.2)" strokeWidth="0.5" />
       </pattern>
-      <pattern id="sailor-grid-lg" width="100" height="100" patternUnits="userSpaceOnUse">
-        <rect width="100" height="100" fill="url(#sailor-grid-sm)" />
+      <pattern id="mm-grid-lg" width="100" height="100" patternUnits="userSpaceOnUse">
+        <rect width="100" height="100" fill="url(#mm-grid-sm)" />
         <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(212,208,200,0.4)" strokeWidth="0.5" />
       </pattern>
-      <marker id="sailor-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <marker id="mm-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
         <path d="M0,0.5 L0,6.5 L6,3.5 z" fill="#B8B5AE" />
       </marker>
-      <marker id="sailor-arrow-active" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <marker id="mm-arrow-active" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
         <path d="M0,0.5 L0,6.5 L6,3.5 z" fill="#A5D900" />
       </marker>
     </defs>
@@ -294,32 +323,72 @@ function PipelineDiagram({
   selectedOp: OperatorId | null;
   onSelectOp: (id: OperatorId | null) => void;
 }) {
-  const inputItems = ["Documents", "Base documentaire", "Question NL"];
-  const outputItems = ["Réponses sourcées", "Citations exactes", "Navigation docs"];
+  const inputItems = ["Catalogue ressources", "Demande / AO", "Critères texte libre"];
+  const outputItems = ["Top ressources", "Radar chart", "Rapport sélection"];
 
-  const connections: [OperatorId, OperatorId][] = [
-    ["DATA_LAYER", "OCR"],
-    ["OCR", "DOC_UNDERSTANDING"],
-    ["DOC_UNDERSTANDING", "EMBEDDING_RAG"],
-    ["EMBEDDING_RAG", "LLM"],
-  ];
+  const renderOperator = (op: PipelineOperator) => {
+    const sel = selectedOp === op.id;
+    return (
+      <g
+        key={op.id}
+        onClick={() => onSelectOp(sel ? null : op.id)}
+        style={{ cursor: "pointer" }}
+        role="button"
+        aria-label={`Opérateur ${op.label}`}
+        aria-pressed={sel}
+      >
+        {sel && (
+          <rect x={op.x - 2} y={op.y - 2} width={op.w + 4} height={op.h + 4} fill="none" stroke="#A5D900" strokeWidth="1.5" />
+        )}
+        <rect x={op.x} y={op.y} width={op.w} height={op.h} fill={sel ? "#EFF5E6" : "#EFEFEF"} stroke={sel ? "#A5D900" : "#9A968E"} strokeWidth="1" />
+        <rect x={op.x} y={op.y} width={op.w} height={18} fill={sel ? "#A5D900" : "#9A968E"} />
+        <text x={op.x + 5} y={op.y + 12} fontFamily="'JetBrains Mono', monospace" fontSize="7" fill={sel ? "#2C2F26" : "#F0EEEB"} fontWeight="500" letterSpacing="0.08em">
+          {op.code}
+        </text>
+        <text x={op.x + op.w / 2} y={op.y + 33} fontFamily="'JetBrains Mono', monospace" fontSize="7.5" fill={sel ? "#2C2F26" : "#1C1C1A"} fontWeight="500" letterSpacing="0.04em" textAnchor="middle">
+          {op.label}
+        </text>
+        <text x={op.x + op.w / 2} y={op.y + 48} fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="#908E85" letterSpacing="0.03em" textAnchor="middle">
+          {op.description}
+        </text>
+        <text x={op.x + op.w / 2} y={op.y + op.h + 14} fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="#B8B5AE" letterSpacing="0.06em" textAnchor="middle">
+          {op.code}
+        </text>
+      </g>
+    );
+  };
+
+  const dataLayer = OPERATORS.find(o => o.id === "DATA_LAYER")!;
+  const embedding = OPERATORS.find(o => o.id === "EMBEDDING")!;
+  const nlpParser = OPERATORS.find(o => o.id === "NLP_PARSER")!;
+  const matchEngine = OPERATORS.find(o => o.id === "MATCH_ENGINE")!;
+  const scorer = OPERATORS.find(o => o.id === "SCORER")!;
+  const convAgent = OPERATORS.find(o => o.id === "CONV_AGENT")!;
+
+  const isActive = (id: OperatorId) => selectedOp === id;
+  const arrowColor = (id: OperatorId) => isActive(id) ? "#A5D900" : "#B8B5AE";
+  const arrowId = (id: OperatorId) => isActive(id) ? "url(#mm-arrow-active)" : "url(#mm-arrow)";
+
+  // Branch mid-point x from DATA_LAYER right edge
+  const branchX = dataLayer.x + dataLayer.w;
+  const branchY = dataLayer.y + dataLayer.h / 2;
 
   return (
     <svg
-      viewBox="0 0 960 300"
+      viewBox="0 0 960 320"
       className="w-full"
       style={{ fontFamily: "'JetBrains Mono', monospace" }}
-      aria-label="Diagramme pipeline AG002 SAILOR"
+      aria-label="Diagramme pipeline AG003 MATCHMAKER"
       role="img"
     >
       <SvgDefs />
-      <rect width="960" height="300" fill="url(#sailor-grid-lg)" />
+      <rect width="960" height="320" fill="url(#mm-grid-lg)" />
 
       {/* Outer border */}
-      <rect x="8" y="8" width="944" height="284" fill="none" stroke="#CDC9C2" strokeWidth="0.75" strokeDasharray="4 2" />
+      <rect x="8" y="8" width="944" height="304" fill="none" stroke="#CDC9C2" strokeWidth="0.75" strokeDasharray="4 2" />
 
       {/* Corner marks */}
-      {([[8,8],[952,8],[8,292],[952,292]] as [number,number][]).map(([cx, cy], i) => (
+      {([[8,8],[952,8],[8,312],[952,312]] as [number,number][]).map(([cx, cy], i) => (
         <g key={i}>
           <line x1={cx - 5} y1={cy} x2={cx + 5} y2={cy} stroke="#CDC9C2" strokeWidth="0.75" />
           <line x1={cx} y1={cy - 5} x2={cx} y2={cy + 5} stroke="#CDC9C2" strokeWidth="0.75" />
@@ -328,121 +397,141 @@ function PipelineDiagram({
 
       {/* Header label */}
       <text x="20" y="26" fontFamily="'JetBrains Mono', monospace" fontSize="7.5" fill="#9A968E" letterSpacing="0.12em">
-        LITE OPS / AG002-SAILOR / PIPELINE SCHEMA / REV.5
+        LITE OPS / AG003-MATCHMAKER / PIPELINE SCHEMA / REV.1
       </text>
       <text x="940" y="26" fontFamily="'JetBrains Mono', monospace" fontSize="7.5" fill="#B8B5AE" letterSpacing="0.08em" textAnchor="end">
         2026-03-28
       </text>
       <line x1="20" y1="33" x2="940" y2="33" stroke="#CDC9C2" strokeWidth="0.5" />
 
+      {/* Status badge — EN DÉVELOPPEMENT */}
+      <rect x="800" y="36" width="140" height="16" fill="rgba(154,150,142,0.15)" stroke="#7D7A73" strokeWidth="0.5" />
+      <text x="870" y="47" fontFamily="'JetBrains Mono', monospace" fontSize="6.5" fill="#7D7A73" letterSpacing="0.1em" textAnchor="middle">
+        EN DÉVELOPPEMENT
+      </text>
+
       {/* Input nodes */}
-      <text x="20" y="90" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#9A968E" letterSpacing="0.12em">INPUTS</text>
+      <text x="20" y="85" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#9A968E" letterSpacing="0.12em">INPUTS</text>
       {inputItems.map((item, i) => (
         <g key={item}>
-          <rect x={20 + i * 140} y="98" width={item.length * 6 + 16} height="22" fill="#F6F4F0" stroke="#D5D1CB" strokeWidth="0.5" />
-          <text x={20 + i * 140 + 8} y="113" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#6B6B60" letterSpacing="0.06em">
+          <rect x={20} y={93 + i * 26} width={item.length * 6 + 12} height="20" fill="#F6F4F0" stroke="#D5D1CB" strokeWidth="0.5" />
+          <text x={26} y={107 + i * 26} fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#6B6B60" letterSpacing="0.05em">
             {item}
           </text>
         </g>
       ))}
 
-      {/* Input flow arrows */}
-      <line x1="60" y1="120" x2="115" y2="132" stroke="#B8B5AE" strokeWidth="0.7" markerEnd="url(#sailor-arrow)" />
-      <line x1="200" y1="120" x2="175" y2="132" stroke="#B8B5AE" strokeWidth="0.7" markerEnd="url(#sailor-arrow)" />
-      <line x1="440" y1="120" x2="530" y2="132" stroke="#B8B5AE" strokeWidth="0.7" markerEnd="url(#sailor-arrow)" />
+      {/* Input → DATA_LAYER */}
+      <line
+        x1={dataLayer.x} y1="104"
+        x2={dataLayer.x} y2={dataLayer.y}
+        stroke="#B8B5AE" strokeWidth="0.7" markerEnd="url(#mm-arrow)"
+      />
 
-      {/* Pipeline connections */}
-      {connections.map(([from, to]) => {
-        const fromOp = OPERATORS.find(o => o.id === from)!;
-        const toOp = OPERATORS.find(o => o.id === to)!;
-        const active = selectedOp === from || selectedOp === to;
-        return (
-          <line
-            key={`${from}-${to}`}
-            x1={fromOp.x + fromOp.w}
-            y1={fromOp.y + fromOp.h / 2}
-            x2={toOp.x}
-            y2={toOp.y + toOp.h / 2}
-            stroke={active ? "#A5D900" : "#B8B5AE"}
-            strokeWidth="0.8"
-            markerEnd={active ? "url(#sailor-arrow-active)" : "url(#sailor-arrow)"}
-          />
-        );
-      })}
+      {/* DATA_LAYER → branch point */}
+      <line
+        x1={branchX} y1={branchY}
+        x2={branchX + 30} y2={branchY}
+        stroke={arrowColor("DATA_LAYER")}
+        strokeWidth="0.8"
+      />
 
-      {/* LLM → OUTPUTS arrow */}
-      {(() => {
-        const last = OPERATORS[OPERATORS.length - 1]!;
-        const active = selectedOp === "LLM";
-        return (
-          <line
-            x1={last.x + last.w}
-            y1={last.y + last.h / 2}
-            x2="900"
-            y2="164"
-            stroke={active ? "#A5D900" : "#B8B5AE"}
-            strokeWidth="0.8"
-            markerEnd={active ? "url(#sailor-arrow-active)" : "url(#sailor-arrow)"}
-          />
-        );
-      })()}
+      {/* Branch to EMBEDDING (upper) */}
+      <line
+        x1={branchX + 30} y1={branchY}
+        x2={branchX + 30} y2={embedding.y + embedding.h / 2}
+        stroke={arrowColor("DATA_LAYER")}
+        strokeWidth="0.8"
+      />
+      <line
+        x1={branchX + 30} y1={embedding.y + embedding.h / 2}
+        x2={embedding.x} y2={embedding.y + embedding.h / 2}
+        stroke={arrowColor("EMBEDDING")}
+        strokeWidth="0.8"
+        markerEnd={arrowId("EMBEDDING")}
+      />
+
+      {/* Branch to NLP_PARSER (lower) */}
+      <line
+        x1={branchX + 30} y1={branchY}
+        x2={branchX + 30} y2={nlpParser.y + nlpParser.h / 2}
+        stroke={arrowColor("DATA_LAYER")}
+        strokeWidth="0.8"
+      />
+      <line
+        x1={branchX + 30} y1={nlpParser.y + nlpParser.h / 2}
+        x2={nlpParser.x} y2={nlpParser.y + nlpParser.h / 2}
+        stroke={arrowColor("NLP_PARSER")}
+        strokeWidth="0.8"
+        markerEnd={arrowId("NLP_PARSER")}
+      />
+
+      {/* EMBEDDING → MATCH_ENGINE */}
+      <line
+        x1={embedding.x + embedding.w} y1={embedding.y + embedding.h / 2}
+        x2={matchEngine.x} y2={matchEngine.y + matchEngine.h / 2}
+        stroke={arrowColor("EMBEDDING")}
+        strokeWidth="0.8"
+        markerEnd={arrowId("EMBEDDING")}
+      />
+
+      {/* NLP_PARSER → MATCH_ENGINE */}
+      <line
+        x1={nlpParser.x + nlpParser.w} y1={nlpParser.y + nlpParser.h / 2}
+        x2={matchEngine.x} y2={matchEngine.y + matchEngine.h / 2}
+        stroke={arrowColor("NLP_PARSER")}
+        strokeWidth="0.8"
+        markerEnd={arrowId("NLP_PARSER")}
+      />
+
+      {/* MATCH_ENGINE → SCORER */}
+      <line
+        x1={matchEngine.x + matchEngine.w} y1={matchEngine.y + matchEngine.h / 2}
+        x2={scorer.x} y2={scorer.y + scorer.h / 2}
+        stroke={arrowColor("MATCH_ENGINE")}
+        strokeWidth="0.8"
+        markerEnd={arrowId("MATCH_ENGINE")}
+      />
+
+      {/* SCORER → CONV_AGENT */}
+      <line
+        x1={scorer.x + scorer.w} y1={scorer.y + scorer.h / 2}
+        x2={convAgent.x} y2={convAgent.y + convAgent.h / 2}
+        stroke={arrowColor("SCORER")}
+        strokeWidth="0.8"
+        markerEnd={arrowId("SCORER")}
+      />
+
+      {/* CONV_AGENT → OUTPUTS */}
+      <line
+        x1={convAgent.x + convAgent.w} y1={convAgent.y + convAgent.h / 2}
+        x2="860" y2="164"
+        stroke={arrowColor("CONV_AGENT")}
+        strokeWidth="0.8"
+        markerEnd={arrowId("CONV_AGENT")}
+      />
+
+      {/* Parallel label */}
+      <text x="225" y="165" fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="#B8B5AE" letterSpacing="0.08em" textAnchor="middle">
+        parallèle
+      </text>
 
       {/* Operator blocks */}
-      {OPERATORS.map((op) => {
-        const sel = selectedOp === op.id;
-        return (
-          <g
-            key={op.id}
-            onClick={() => onSelectOp(sel ? null : op.id)}
-            style={{ cursor: "pointer" }}
-            role="button"
-            aria-label={`Opérateur ${op.label}`}
-            aria-pressed={sel}
-          >
-            {sel && (
-              <rect x={op.x - 2} y={op.y - 2} width={op.w + 4} height={op.h + 4} fill="none" stroke="#A5D900" strokeWidth="1.5" />
-            )}
-            <rect
-              x={op.x} y={op.y} width={op.w} height={op.h}
-              fill={sel ? "#EFF5E6" : "#EFEFEF"}
-              stroke={sel ? "#A5D900" : "#9A968E"}
-              strokeWidth="1"
-            />
-            <rect x={op.x} y={op.y} width={op.w} height={18} fill={sel ? "#A5D900" : "#9A968E"} />
-            <text x={op.x + 5} y={op.y + 12} fontFamily="'JetBrains Mono', monospace" fontSize="7" fill={sel ? "#2C2F26" : "#F0EEEB"} fontWeight="500" letterSpacing="0.08em">
-              {op.code}
-            </text>
-            <text x={op.x + op.w / 2} y={op.y + 33} fontFamily="'JetBrains Mono', monospace" fontSize="7.5" fill={sel ? "#2C2F26" : "#1C1C1A"} fontWeight="500" letterSpacing="0.04em" textAnchor="middle">
-              {op.label}
-            </text>
-            <text x={op.x + op.w / 2} y={op.y + 48} fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="#908E85" letterSpacing="0.03em" textAnchor="middle">
-              {op.description}
-            </text>
-            <text x={op.x + op.w / 2} y={op.y + op.h + 14} fontFamily="'JetBrains Mono', monospace" fontSize="6" fill="#B8B5AE" letterSpacing="0.06em" textAnchor="middle">
-              {op.code}
-            </text>
-          </g>
-        );
-      })}
+      {OPERATORS.map(renderOperator)}
 
       {/* Output nodes */}
-      <text x="20" y="252" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#9A968E" letterSpacing="0.12em">OUTPUTS</text>
+      <text x="868" y="200" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#9A968E" letterSpacing="0.12em">OUTPUTS</text>
       {outputItems.map((item, i) => (
         <g key={item}>
-          <rect x={20 + i * 200} y="258" width={item.length * 6 + 16} height="22" fill="#EFF5E6" stroke="#D5D1CB" strokeWidth="0.5" />
-          <text x={20 + i * 200 + 8} y="273" fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#6B6B60" letterSpacing="0.06em">
+          <rect x={868} y={208 + i * 26} width={item.length * 6 + 12} height="20" fill="#EFF5E6" stroke="#D5D1CB" strokeWidth="0.5" />
+          <text x={874} y={222 + i * 26} fontFamily="'JetBrains Mono', monospace" fontSize="7" fill="#6B6B60" letterSpacing="0.05em">
             {item}
           </text>
         </g>
       ))}
 
-      {/* Output flow arrows */}
-      <line x1="145" y1="198" x2="60" y2="256" stroke="#B8B5AE" strokeWidth="0.7" markerEnd="url(#sailor-arrow)" />
-      <line x1="625" y1="198" x2="265" y2="256" stroke="#B8B5AE" strokeWidth="0.7" markerEnd="url(#sailor-arrow)" />
-      <line x1="850" y1="164" x2="465" y2="256" stroke="#B8B5AE" strokeWidth="0.7" markerEnd="url(#sailor-arrow)" />
-
       {/* Click hint */}
-      <text x="940" y="290" fontFamily="'JetBrains Mono', monospace" fontSize="6.5" fill="#B8B5AE" letterSpacing="0.06em" textAnchor="end">
+      <text x="940" y="308" fontFamily="'JetBrains Mono', monospace" fontSize="6.5" fill="#B8B5AE" letterSpacing="0.06em" textAnchor="end">
         Cliquer sur un opérateur pour les détails
       </text>
     </svg>
@@ -558,7 +647,7 @@ function SectionReveal({
 // Page
 // ---------------------------------------------------------------------------
 
-export default function SailorPage() {
+export default function MatchmakerPage() {
   const [selectedOp, setSelectedOp] = useState<OperatorId | null>(null);
   const [activeTab, setActiveTab] = useState<LayerTabId>("TECHNIQUE");
 
@@ -573,22 +662,19 @@ export default function SailorPage() {
       {/* ================================================================ */}
       <section
         className="relative min-h-screen bg-system-green blueprint-grid flex flex-col"
-        aria-label="Présentation AG002 SAILOR"
+        aria-label="Présentation AG003 MATCHMAKER"
       >
         <div className="relative z-10 flex flex-col justify-center max-w-7xl mx-auto px-8 lg:px-20 pt-40 pb-24 flex-1">
 
-          {/* Status badge */}
+          {/* Status badge — EN DÉVELOPPEMENT (grey, not green) */}
           <motion.div
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="flex items-center gap-2 mb-12"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-green opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-signal-green" />
-            </span>
-            <span className="font-mono text-xs tracking-[0.2em] uppercase text-signal-green">ACTIF</span>
+            <span className="h-2 w-2 rounded-full bg-steel" />
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-steel">EN DÉVELOPPEMENT</span>
           </motion.div>
 
           {/* Agent code */}
@@ -598,7 +684,7 @@ export default function SailorPage() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="font-mono text-xs tracking-[0.2em] uppercase text-chrome mb-4"
           >
-            AG002
+            AG003
           </motion.span>
 
           {/* Agent name */}
@@ -609,7 +695,7 @@ export default function SailorPage() {
             className="font-sans font-light text-architect-paper leading-[0.9] tracking-tight mb-6"
             style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}
           >
-            SAILOR
+            MATCHMAKER
           </motion.h1>
 
           {/* Tagline */}
@@ -620,7 +706,7 @@ export default function SailorPage() {
             className="font-sans font-light text-architect-paper/60 max-w-xl leading-relaxed mb-12"
             style={{ fontSize: "clamp(1rem, 1.8vw, 1.25rem)" }}
           >
-            Transformez votre base documentaire en chatbot à sources citées. Zéro hallucination.
+            Faites correspondre vos ressources aux besoins. En secondes, avec explication structurée.
           </motion.p>
 
           {/* Key metrics */}
@@ -630,7 +716,7 @@ export default function SailorPage() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="flex flex-wrap gap-8 mb-14"
           >
-            {["5 opérateurs", "2 variantes spécialisées", "< 5 jours de déploiement"].map((m) => (
+            {["6 opérateurs", "4 types de ressources", "Score radar intégré"].map((m) => (
               <div key={m} className="flex items-center gap-2">
                 <span className="font-mono text-[10px] tracking-[0.15em] text-chrome uppercase">—</span>
                 <span className="font-mono text-sm text-architect-paper/80 tracking-widest">{m}</span>
@@ -645,18 +731,30 @@ export default function SailorPage() {
             transition={{ duration: 0.5, delay: 0.65 }}
           >
             <a
-              href="mailto:contact@liteops.fr?subject=Démo SAILOR AG002"
-              className="group inline-flex items-center gap-3 border border-architect-paper/30 px-8 py-4 font-mono text-sm text-architect-paper/80 tracking-widest uppercase transition-all duration-300 hover:border-signal-green hover:text-signal-green hover:bg-signal-green/5"
+              href="mailto:contact@liteops.fr?subject=Intérêt MATCHMAKER AG003"
+              className="group inline-flex items-center gap-3 border border-steel/40 px-8 py-4 font-mono text-sm text-architect-paper/60 tracking-widest uppercase transition-all duration-300 hover:border-architect-paper/40 hover:text-architect-paper/80"
             >
-              Demander une démo
+              Exprimer mon intérêt
               <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
             </a>
+          </motion.div>
+
+          {/* Development notice */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="mt-8 border border-steel/20 bg-architect-paper/5 px-6 py-4 max-w-lg"
+          >
+            <p className="font-mono text-[10px] text-steel/80 leading-relaxed tracking-wider">
+              Cet agent est en cours de développement. La documentation ci-dessous présente l'architecture cible et les fonctionnalités prévues.
+            </p>
           </motion.div>
         </div>
 
         {/* Bottom rule */}
         <div className="border-t border-architect-paper/10 max-w-7xl mx-auto px-8 lg:px-20 w-full py-6 flex items-center justify-between">
-          <span className="font-mono text-[10px] text-chrome tracking-widest">LITE OPS / AG002</span>
+          <span className="font-mono text-[10px] text-chrome tracking-widest">LITE OPS / AG003</span>
           <Link
             href="/operateurs"
             className="font-mono text-[10px] text-chrome-dark hover:text-architect-paper transition-colors tracking-widest uppercase"
@@ -683,7 +781,7 @@ export default function SailorPage() {
               className="mt-3 font-sans font-light text-system-green leading-tight"
               style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
             >
-              Cinq opérateurs. Zéro hallucination.
+              Six opérateurs. Un résultat expliqué.
             </h2>
           </SectionReveal>
 
@@ -877,7 +975,7 @@ export default function SailorPage() {
       </section>
 
       {/* ================================================================ */}
-      {/* SECTION 5 — SCREENSHOTS (placeholders)                           */}
+      {/* SECTION 5 — SCREENSHOTS (placeholder — en développement)         */}
       {/* ================================================================ */}
       <section
         className="bg-fog py-24 lg:py-32"
@@ -895,50 +993,86 @@ export default function SailorPage() {
             </h2>
           </SectionReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                src: "/photos/photo-1482881497185-d4a9ddbe4151.avif",
-                alt: "Interface Sailor — aperçu",
-                caption: "Interface en cours de finalisation",
-              },
-              {
-                src: "/photos/photo-1505521377774-103a8cc2f735.avif",
-                alt: "Chat interface Sailor",
-                caption: "Interface en cours de finalisation",
-              },
-            ].map((shot, i) => (
-              <SectionReveal key={shot.src} delay={i * 0.1}>
-                <div className="border border-rule overflow-hidden">
-                  <div className="bg-system-green flex items-center gap-2 px-4 py-2.5">
-                    <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
-                    <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
-                    <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
-                    <span className="flex-1 mx-4 h-4 bg-architect-paper/10 border border-architect-paper/10 font-mono text-[8px] text-chrome-light text-center leading-4 tracking-wider">
-                      sailor.liteops.fr
-                    </span>
+          <SectionReveal delay={0.1}>
+            <div className="border border-rule bg-warm-paper overflow-hidden">
+              {/* Browser chrome mock */}
+              <div className="bg-system-green flex items-center gap-2 px-4 py-2.5">
+                <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
+                <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
+                <span className="h-2 w-2 rounded-full bg-architect-paper/20" />
+                <span className="flex-1 mx-4 h-4 bg-architect-paper/10 border border-architect-paper/10 font-mono text-[8px] text-chrome-light text-center leading-4 tracking-wider">
+                  matchmaker.liteops.fr
+                </span>
+              </div>
+
+              {/* Placeholder content */}
+              <div className="flex flex-col items-center justify-center py-24 px-8 blueprint-grid">
+                <div className="text-center max-w-md">
+                  {/* Radar chart placeholder */}
+                  <div className="mx-auto mb-8 w-48 h-48 relative">
+                    <svg viewBox="0 0 200 200" className="w-full h-full opacity-30">
+                      {/* Radar grid */}
+                      {[0.2, 0.4, 0.6, 0.8, 1].map((r, i) => (
+                        <polygon
+                          key={i}
+                          points={Array.from({ length: 5 }, (_, j) => {
+                            const angle = (j * 72 - 90) * Math.PI / 180;
+                            const x = 100 + r * 80 * Math.cos(angle);
+                            const y = 100 + r * 80 * Math.sin(angle);
+                            return `${x},${y}`;
+                          }).join(" ")}
+                          fill="none"
+                          stroke="#9A968E"
+                          strokeWidth="0.5"
+                        />
+                      ))}
+                      {/* Radar axes */}
+                      {Array.from({ length: 5 }, (_, j) => {
+                        const angle = (j * 72 - 90) * Math.PI / 180;
+                        return (
+                          <line
+                            key={j}
+                            x1="100" y1="100"
+                            x2={100 + 80 * Math.cos(angle)}
+                            y2={100 + 80 * Math.sin(angle)}
+                            stroke="#B8B5AE"
+                            strokeWidth="0.5"
+                          />
+                        );
+                      })}
+                      {/* Sample data polygon */}
+                      <polygon
+                        points={[0.95, 0.88, 0.94, 0.87, 0.91].map((v, j) => {
+                          const angle = (j * 72 - 90) * Math.PI / 180;
+                          const x = 100 + v * 80 * Math.cos(angle);
+                          const y = 100 + v * 80 * Math.sin(angle);
+                          return `${x},${y}`;
+                        }).join(" ")}
+                        fill="rgba(165,217,0,0.1)"
+                        stroke="#A5D900"
+                        strokeWidth="1"
+                      />
+                    </svg>
                   </div>
-                  <div className="relative aspect-[16/10] bg-warm-paper">
-                    <Image
-                      src={shot.src}
-                      alt={shot.alt}
-                      fill
-                      className="object-cover grayscale opacity-60"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-system-green/80 backdrop-blur-sm px-6 py-3 border border-architect-paper/20">
-                        <p className="font-mono text-xs text-chrome-light tracking-widest text-center">Interface en cours de finalisation</p>
-                      </div>
-                    </div>
-                  </div>
+
+                  <p className="font-mono text-[10px] tracking-widest text-steel uppercase mb-3">
+                    En cours de développement
+                  </p>
+                  <p className="font-sans text-sm text-ink/50 leading-relaxed mb-6">
+                    Les interfaces de Matchmaker sont en cours de conception. Le diagramme radar est au cœur de l'expérience — chaque matching retourne un score visuel expliqué.
+                  </p>
+
+                  <a
+                    href="mailto:contact@liteops.fr?subject=Intérêt MATCHMAKER AG003"
+                    className="group inline-flex items-center gap-2 border border-rule text-steel font-mono text-xs tracking-widest uppercase px-6 py-3 hover:border-chrome-dark hover:text-ink transition-all duration-200"
+                  >
+                    Exprimer mon intérêt
+                    <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
+                  </a>
                 </div>
-                <p className="mt-3 font-mono text-[10px] tracking-widest text-steel uppercase">
-                  — {shot.caption}
-                </p>
-              </SectionReveal>
-            ))}
-          </div>
+              </div>
+            </div>
+          </SectionReveal>
         </div>
       </section>
 
@@ -961,7 +1095,7 @@ export default function SailorPage() {
             </h2>
           </SectionReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {SPECIALISTS.map((spec, i) => (
               <SectionReveal key={spec.code} delay={i * 0.1}>
                 <div className="border border-rule bg-architect-paper p-8 h-full">
@@ -973,7 +1107,7 @@ export default function SailorPage() {
 
                   <h3
                     className="font-sans font-light text-system-green mb-1"
-                    style={{ fontSize: "clamp(1.1rem, 1.5vw, 1.4rem)" }}
+                    style={{ fontSize: "clamp(1rem, 1.3vw, 1.2rem)" }}
                   >
                     {spec.name}
                   </h3>
@@ -1015,6 +1149,9 @@ export default function SailorPage() {
             >
               Simple et transparent.
             </h2>
+            <p className="mt-3 font-mono text-xs text-steel tracking-widest">
+              Tarifs indicatifs — agent en cours de développement.
+            </p>
           </SectionReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -1068,7 +1205,7 @@ export default function SailorPage() {
 
                   <div className="mt-8">
                     <a
-                      href="mailto:contact@liteops.fr?subject=SAILOR - Demande tarif"
+                      href="mailto:contact@liteops.fr?subject=MATCHMAKER - Intérêt tarif"
                       className={[
                         "group inline-flex items-center gap-2 w-full justify-center border px-6 py-3 font-mono text-xs tracking-widest uppercase transition-all duration-200",
                         tier.highlight
@@ -1076,7 +1213,7 @@ export default function SailorPage() {
                           : "border-rule text-steel hover:border-chrome-dark hover:text-ink",
                       ].join(" ")}
                     >
-                      Commencer
+                      M'alerter au lancement
                       <span className="inline-block transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">→</span>
                     </a>
                   </div>
@@ -1125,25 +1262,22 @@ export default function SailorPage() {
               </Link>
             </SectionReveal>
 
-            {/* MATCHMAKER */}
+            {/* SAILOR */}
             <SectionReveal delay={0.1}>
               <Link
-                href="/agents/matchmaker"
+                href="/agents/sailor"
                 className="group flex flex-col justify-between border border-architect-paper/20 p-8 hover:border-architect-paper/50 transition-all duration-300 min-h-[180px]"
               >
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="font-mono text-[10px] tracking-widest text-chrome">AG003</span>
-                    <span className="font-mono text-[9px] tracking-widest text-steel border border-steel/40 px-1.5 py-0.5">EN DÉVELOPPEMENT</span>
-                  </div>
+                  <span className="font-mono text-[10px] tracking-widest text-chrome block mb-2">AG002</span>
                   <h3
                     className="font-sans font-light text-architect-paper mb-3"
                     style={{ fontSize: "clamp(1.5rem, 2.5vw, 2.5rem)" }}
                   >
-                    MATCHMAKER
+                    SAILOR
                   </h3>
                   <p className="font-mono text-xs text-chrome-light/70 leading-relaxed">
-                    Faites correspondre vos ressources aux besoins. Score radar expliqué.
+                    Transformez votre base documentaire en chatbot à sources citées.
                   </p>
                 </div>
                 <div className="mt-6 flex items-center gap-2 font-mono text-xs text-chrome-dark uppercase tracking-widest">
