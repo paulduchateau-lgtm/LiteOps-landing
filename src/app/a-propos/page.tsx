@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 
@@ -16,6 +17,7 @@ const ES = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
 type Cofounder = {
   initials: string;
+  photo: string;
   layer: string;
   name: string;
   bio: string;
@@ -26,6 +28,7 @@ type Cofounder = {
 const COFOUNDERS: Cofounder[] = [
   {
     initials: "C",
+    photo: "/photos/staff-cyril-vegni.jpg",
     layer: "LAYER MÉTIER",
     name: "Cyril",
     bio: "Fondateur d'Oxea et de Willing — deux cabinets vendus. Continue d'accompagner des clients en stratégie et change management. Sa mission : transformer le conseil pour qu'il apporte sa vraie valeur — du conseil augmenté par l'IA, hyper efficace et transparent.",
@@ -34,6 +37,7 @@ const COFOUNDERS: Cofounder[] = [
   },
   {
     initials: "PD",
+    photo: "/photos/staff-paul-duchateau.jpg",
     layer: "LAYER PRODUIT & STRATÉGIE",
     name: "Paul D.",
     bio: "Ingénieur entrepreneur, toujours à la croisée IT Product/Project Manager et Business Strategist. Sa mission : comprendre un métier et penser comment l'améliorer, le rendre plus efficace, plus agréable. Chez LiteOps, il met tout en musique.",
@@ -42,6 +46,7 @@ const COFOUNDERS: Cofounder[] = [
   },
   {
     initials: "PB",
+    photo: "/photos/staff-paul-breton.jpg",
     layer: "LAYER TECHNIQUE & DATA",
     name: "Paul B.",
     bio: "Ingénieur architecte Data/IA, plus de 150 use cases IA déployés depuis 10 ans. Architecte de Namibia, la plateforme d'agrégation de data et concentrateur de services. Sa vision : transposer le métier en organisation de la donnée.",
@@ -112,15 +117,15 @@ function CofounderCard({ person, index }: { person: Cofounder; index: number }) 
   return (
     <Reveal delay={index * 0.12}>
       <div className="flex flex-col h-full">
-        {/* Avatar placeholder */}
-        <div className="aspect-square bg-fog border border-chrome-light flex items-center justify-center mb-6">
-          <span
-            className="font-mono text-chrome-dark select-none"
-            style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)" }}
-            aria-hidden="true"
-          >
-            {person.initials}
-          </span>
+        {/* Photo */}
+        <div className="relative aspect-square overflow-hidden border border-chrome-light mb-6">
+          <Image
+            src={person.photo}
+            alt={person.name}
+            fill
+            className="object-cover object-top grayscale-[20%]"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
         </div>
 
         {/* Layer badge */}
