@@ -129,13 +129,13 @@ function HeroSection() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="flex items-center gap-2 mb-12"
         >
-          <span className="font-mono text-xs tracking-[0.2em] uppercase text-signal-green">
+          <span className="font-mono text-xs tracking-[0.2em] uppercase text-signal-green-text">
             STATUT
           </span>
-          <span className="text-signal-green text-[11px]" aria-hidden="true">
+          <span className="text-signal-green-text text-[11px]" aria-hidden="true">
             ●
           </span>
-          <span className="font-mono text-xs tracking-[0.2em] uppercase text-signal-green">
+          <span className="font-mono text-xs tracking-[0.2em] uppercase text-signal-green-text">
             ACTIF
           </span>
         </motion.div>

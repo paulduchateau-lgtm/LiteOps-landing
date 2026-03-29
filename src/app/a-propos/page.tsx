@@ -31,9 +31,9 @@ const COFOUNDERS: Cofounder[] = [
     photo: "/photos/staff-cyril-vegni.jpg",
     layer: "LAYER MÉTIER",
     name: "Cyril",
-    bio: "Fondateur d'Oxea et de Willing — deux cabinets vendus. Continue d'accompagner des clients en stratégie et change management. Sa mission : transformer le conseil pour qu'il apporte sa vraie valeur — du conseil augmenté par l'IA, hyper efficace et transparent.",
+    bio: "Fondateur et investisseur dans plusieurs cabinets de conseil, avec deux exits remarqués, il poursuit aujourd'hui son engagement auprès de ses clients en stratégie de transformation et en change management. Sa conviction : le conseil est appelé à disparaître s'il n'évolue pas. Sa mission : le réinventer en profondeur — faire émerger de véritables transformers.",
     tags: ["Risques", "Legal/Compliance", "Excellence opérationnelle", "Optimisation des ressources"],
-    quote: "Il transforme nos orchestrateurs en champions du métier.",
+    quote: "Combiner expertise humaine et puissance de l'IA pour un conseil réellement augmenté, plus transparent et tourné vers l'impact durable.",
   },
   {
     initials: "PD",
@@ -60,6 +60,40 @@ type Conviction = {
   title: string;
   body: string;
 };
+
+type Partner = {
+  name: string;
+  description: string;
+};
+
+const CLOUD_CERTIFICATIONS = [
+  { name: "AWS", full: "Amazon Web Services" },
+  { name: "GCP", full: "Google Cloud Platform" },
+  { name: "Azure", full: "Microsoft Azure" },
+  { name: "S3NS", full: "Thales / Google" },
+  { name: "Scaleway", full: "Scaleway Cloud" },
+  { name: "OCI", full: "Oracle Cloud" },
+];
+
+const TECHNICAL_INTERFACES = [
+  "Oracle Database",
+  "Power BI",
+  "Microsoft 365",
+  "SAP",
+  "Salesforce",
+  "PostgreSQL",
+  "MongoDB",
+  "Snowflake",
+  "Databricks",
+  "ServiceNow",
+];
+
+const PARTNERS: Partner[] = [
+  { name: "Stanford", description: "Recherche IA appliquée" },
+  { name: "Deloitte", description: "Audit & transformation" },
+  { name: "Infinitif", description: "Innovation data souveraine" },
+  { name: "Oracle", description: "Infrastructure & bases de données" },
+];
 
 const CONVICTIONS: Conviction[] = [
   {
@@ -129,7 +163,7 @@ function CofounderCard({ person, index }: { person: Cofounder; index: number }) 
         </div>
 
         {/* Layer badge */}
-        <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-signal-green block mb-3">
+        <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-signal-green-text block mb-3">
           {person.layer}
         </span>
 
@@ -287,7 +321,107 @@ export default function AProposPage() {
         </div>
       </section>
 
-      {/* ── Section 4: CTA ── */}
+      {/* ── Section 4: Certifications ── */}
+      <section className="bg-architect-paper py-24 lg:py-32 border-t border-chrome-light/70">
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <Reveal className="mb-14">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark block mb-3">
+              CERTIFICATIONS CLOUD
+            </span>
+            <h2
+              className="font-sans font-normal md:font-light text-system-green leading-tight"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
+            >
+              Architectes certifiés. Multi-cloud.
+            </h2>
+          </Reveal>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            {CLOUD_CERTIFICATIONS.map((cert, i) => (
+              <Reveal key={cert.name} delay={i * 0.07}>
+                <div className="border border-chrome-light bg-warm-paper p-5 flex flex-col gap-2">
+                  <span className="font-mono font-medium text-system-green tracking-wider text-sm">
+                    {cert.name}
+                  </span>
+                  <span className="font-mono text-[11px] text-steel tracking-wide leading-tight">
+                    {cert.full}
+                  </span>
+                  <span className="font-mono text-[10px] text-signal-green-text tracking-widest uppercase mt-1">
+                    Certified
+                  </span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 5: Interfaces techniques ── */}
+      <section className="bg-warm-paper py-24 lg:py-32 border-t border-chrome-light/70">
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <Reveal className="mb-14">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark block mb-3">
+              INTERFACES TECHNIQUES
+            </span>
+            <h2
+              className="font-sans font-normal md:font-light text-system-green leading-tight"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
+            >
+              Nous parlons à vos outils.
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <div className="flex flex-wrap gap-3">
+              {TECHNICAL_INTERFACES.map((tool) => (
+                <span
+                  key={tool}
+                  className="font-mono text-[11px] tracking-[0.15em] uppercase px-4 py-2 border border-chrome-light text-steel bg-architect-paper"
+                >
+                  {tool}
+                </span>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── Section 6: Partenaires ── */}
+      <section className="bg-architect-paper py-24 lg:py-32 border-t border-chrome-light/70">
+        <div className="max-w-7xl mx-auto px-8 lg:px-20">
+          <Reveal className="mb-14">
+            <span className="font-mono text-xs tracking-[0.2em] uppercase text-chrome-dark block mb-3">
+              PARTENAIRES
+            </span>
+            <h2
+              className="font-sans font-normal md:font-light text-system-green leading-tight"
+              style={{ fontSize: "clamp(1.8rem, 3.5vw, 3rem)" }}
+            >
+              Des appuis stratégiques.
+            </h2>
+          </Reveal>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {PARTNERS.map((partner, i) => (
+              <Reveal key={partner.name} delay={i * 0.1}>
+                <div className="border border-chrome-light bg-warm-paper p-8 flex flex-col gap-3 h-full">
+                  <h3
+                    className="font-sans font-normal md:font-light text-system-green leading-tight"
+                    style={{ fontSize: "clamp(1.1rem, 2vw, 1.35rem)" }}
+                  >
+                    {partner.name}
+                  </h3>
+                  <p className="font-sans text-sm text-ink/65 leading-relaxed">
+                    {partner.description}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Section 7: CTA ── */}
       <section className="bg-system-green py-20 lg:py-28 text-center">
         <div className="max-w-3xl mx-auto px-8 lg:px-20">
           <Reveal>
@@ -306,6 +440,23 @@ export default function AProposPage() {
               Démarrer un projet
               <span aria-hidden="true">→</span>
             </Link>
+
+            <div className="mt-10 pt-8 border-t border-architect-paper/15">
+              <a
+                href="https://claude.ai/public/artifacts/f65dd573-0b8a-416a-a6d5-ea7b09faeaac"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-architect-paper/50 hover:text-architect-paper/80 transition-colors duration-200"
+              >
+                Découvrir notre identité de marque
+                <span
+                  className="inline-block transition-transform duration-200 group-hover:translate-x-1"
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+              </a>
+            </div>
           </Reveal>
         </div>
       </section>

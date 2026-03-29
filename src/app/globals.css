@@ -10,6 +10,7 @@
 
   /* Signal — the ONLY saturated color. Used for active/live states ONLY */
   --color-signal-green: #A5D900;
+  --color-signal-green-text: #4A6600; /* Darker signal for text on light backgrounds — WCAG AA compliant */
 
   /* Paper tones — warm neutrals */
   --color-architect-paper: #F0EEEB;    /* Primary background — warm off-white */

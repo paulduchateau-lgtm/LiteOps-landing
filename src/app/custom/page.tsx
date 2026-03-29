@@ -385,7 +385,7 @@ function VoteCard({
           "border transition-all duration-200",
           "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal-green",
           voted
-            ? "border-signal-green text-signal-green bg-architect-paper"
+            ? "border-signal-green-text text-signal-green-text bg-architect-paper"
             : "border-chrome text-chrome-dark bg-architect-paper hover:border-chrome-dark hover:text-ink",
         ].join(" ")}
       >

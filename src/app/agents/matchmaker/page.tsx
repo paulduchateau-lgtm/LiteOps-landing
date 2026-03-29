@@ -800,7 +800,7 @@ export default function MatchmakerPage() {
                   className={[
                     "font-mono text-[11px] tracking-[0.15em] px-3 py-1.5 border transition-all duration-200",
                     selectedOp === op.id
-                      ? "border-signal-green bg-signal-green/10 text-signal-green"
+                      ? "border-signal-green-text bg-signal-green/10 text-signal-green-text"
                       : "border-chrome text-steel hover:border-chrome-dark hover:text-ink",
                   ].join(" ")}
                 >
@@ -1167,7 +1167,7 @@ export default function MatchmakerPage() {
                 >
                   {tier.highlight && (
                     <div className="mb-4">
-                      <span className="font-mono text-[11px] tracking-widest text-signal-green uppercase border border-signal-green px-2 py-0.5">
+                      <span className="font-mono text-[11px] tracking-widest text-signal-green-text uppercase border border-signal-green-text px-2 py-0.5">
                         Recommandé
                       </span>
                     </div>
@@ -1180,7 +1180,7 @@ export default function MatchmakerPage() {
                     <span
                       className={[
                         "font-mono font-medium text-2xl",
-                        tier.highlight ? "text-signal-green" : "text-ink",
+                        tier.highlight ? "text-signal-green-text" : "text-ink",
                       ].join(" ")}
                     >
                       {tier.price}
@@ -1196,7 +1196,7 @@ export default function MatchmakerPage() {
                     <ul className="space-y-2">
                       {tier.features.map(feat => (
                         <li key={feat} className="flex items-start gap-2 font-mono text-[11px] text-ink/75">
-                          <span className="text-signal-green shrink-0 mt-0.5">✓</span>
+                          <span className="text-signal-green-text shrink-0 mt-0.5">✓</span>
                           {feat}
                         </li>
                       ))}
@@ -1209,7 +1209,7 @@ export default function MatchmakerPage() {
                       className={[
                         "group inline-flex items-center gap-2 w-full justify-center border px-6 py-3 font-mono text-xs tracking-widest uppercase transition-all duration-200",
                         tier.highlight
-                          ? "border-signal-green text-signal-green hover:bg-signal-green hover:text-system-green"
+                          ? "border-signal-green-text text-signal-green-text hover:bg-signal-green hover:text-system-green"
                           : "border-rule text-steel hover:border-chrome-dark hover:text-ink",
                       ].join(" ")}
                     >
